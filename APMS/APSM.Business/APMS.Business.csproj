@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B8763798-C45D-459C-BC47-E4DF94F2E183}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>APMS.Business</RootNamespace>
+    <AssemblyName>APMS.Business</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Business\AuthorizeToken\AuthorizeToken.cs" />
+    <Compile Include="Business\GetDevicesAPI\GetDeviceAPIViewModel.cs" />
+    <Compile Include="Business\GetDevicesAPI\GetDeviceAPI.cs" />
+    <Compile Include="Business\GetDevicesAPI\IGetDeviceAPI.cs" />
+    <Compile Include="Business\LoginAPI\ILoginAPI.cs" />
+    <Compile Include="Business\LoginAPI\LoginAPI.cs" />
+    <Compile Include="Business\LoginAPI\LoginAPIViewModel.cs" />
+    <Compile Include="Business\LoginWeb\ILoginWeb.cs" />
+    <Compile Include="Business\LoginWeb\LoginWeb.cs" />
+    <Compile Include="Business\LoginWeb\LoginWebViewModel.cs" />
+    <Compile Include="Business\PushSensorDataAPI\IPushSensorDataAPI.cs" />
+    <Compile Include="Business\PushSensorDataAPI\PushSensorDataAPI.cs" />
+    <Compile Include="Business\PushSensorDataAPI\PushSensorDataAPIViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\APMS.DataAccess\APMS.DataAccess.csproj">
+      <Project>{5bc3cc44-2d33-474b-b2b3-0d72a90a2083}</Project>
+      <Name>APMS.DataAccess</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Business\HomeWeb\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
