@@ -6,23 +6,32 @@ using System.Net.Http;
 using System.Web.Http;
 using APMS.Business.API;
 using APMS.DataAccess;
+using APMS.Models;
 
 namespace APMS.Controllers
 {
     public class GetDeviceController : ApiController
     {
-        public GetDeviceAPIViewModel POST()
+        public HttpResponseMessage POST(RequestViewModel model)
         {
             IGetDeviceAPI getDeviceAPI = new GetDevice();
-            var header = this.Request.Headers;
             Account acc = new Account();
-            if (header.Contains("token"))
+            HttpResponseMessage response;
+            string token = model.Token;
+            if (token != null)
             {
-                string token = header.GetValues("token").First();
+                //string token = header.GetValues("token").First();
                 acc = AuthorizeToken.Authorize(token);
+                if (acc != null)
+                {
+                    GetDeviceAPIViewModel responseModel = getDeviceAPI.Get(acc.AccountId);
+                    response = Request.CreateResponse(HttpStatusCode.OK, responseModel);
+                    return response;
+                }
+
             }
-            GetDeviceAPIViewModel model = getDeviceAPI.Get(acc.AccountId);
-            return model;
+            response = Request.CreateResponse(HttpStatusCode.Unauthorized);
+            return response;
         }
     }
 }

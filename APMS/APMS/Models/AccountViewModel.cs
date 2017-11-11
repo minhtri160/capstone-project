@@ -5,9 +5,9 @@ using System.Web;
 
 namespace APMS.Models
 {
-    public class RequestViewModel
+    public class AccountViewModel
     {
+        public string Username { get; set; }
         public string Token { get; set; }
-        public object RequestObject { get; set; }
     }
 }
