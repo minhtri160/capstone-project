@@ -6,34 +6,35 @@ using System.Net.Http;
 using System.Web.Http;
 using APMS.Models;
 using APMS.Business.API;
-using System.Web.Helpers;
 
 namespace APMS.Controllers
 {
     public class LoginController : ApiController
     {
-        public HttpResponseMessage POST(LoginAPIViewModel model)
+        public ResponseViewModel POST(LoginAPIViewModel model)
         {
             ILoginAPI loginBusiness = new LoginAPI();
-            HttpResponseMessage responseMessage;
+            ResponseViewModel response = new ResponseViewModel();
             if (model != null)
             {
                 APMS.DataAccess.Account acc = loginBusiness.Login(model);
 
                 if (acc == null)
                 {
-                    responseMessage = Request.CreateResponse(HttpStatusCode.Unauthorized);
+                    response.HasErr = true;
+                    response.ErrInfo = "Tài khoản hoặc mật khẩu không đúng!";
                 }
                 else
                 {
-                    responseMessage = Request.CreateResponse(HttpStatusCode.OK, new { access_token = acc.Token });
+                    response.ResponseObj = acc;
                 }
             }
             else
             {
-                responseMessage = Request.CreateResponse(HttpStatusCode.BadRequest);
+                response.HasErr = true;
+                response.ErrInfo = "Model null!";
             }
-            return responseMessage;
+            return response;
         }
     }
 }

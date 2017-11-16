@@ -5,9 +5,23 @@ using System.Web;
 
 namespace APMS.Models
 {
-    public class RequestViewModel
+    public class ResponseViewModel
     {
-        public string Token { get; set; }
-        public object RequestObject { get; set; }
+        public ResponseViewModel()
+        {
+            HasErr = false;
+            ErrInfo = "";
+        }
+
+        public ResponseViewModel(object responseObj)
+        {
+            HasErr = false;
+            ErrInfo = "";
+            ResponseObj = responseObj;
+        }
+
+        public bool HasErr { get; set; }
+        public string ErrInfo { get; set; }
+        public object ResponseObj { get; set; }
     }
 }
