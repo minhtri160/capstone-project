@@ -43,7 +43,7 @@ void setup()
   vw_set_rx_pin(receive_pin);
   vw_set_ptt_pin(transmit_en_pin);
   vw_set_ptt_inverted(true); // Required for DR3100
-  vw_setup(2500);  // Bits per sec
+  vw_setup(2000);  // Bits per sec
   vw_rx_start();       // Start the receiver PLL running
 
   //Thiet lap xuat nhap cho arduino
@@ -94,18 +94,18 @@ float dodong() {
 
 void loop()
 { /*
-  String status1 = "1";
-  //Chep gia tri do duoc cua sensor vao trong cac bien String de chuan bi gui di
-  String giatridovong = String(dovong());
-  String giatridonhiet = String(donhiet());
-  String giatridodong = String(dodong());
-  String finalValue = deviceID +  ";" + status1 + ";" + "dovong:" + giatridovong
+    String status1 = "1";
+    //Chep gia tri do duoc cua sensor vao trong cac bien String de chuan bi gui di
+    String giatridovong = String(dovong());
+    String giatridonhiet = String(donhiet());
+    String giatridodong = String(dodong());
+    String finalValue = deviceID +  ";" + status1 + ";" + "dovong:" + giatridovong
                       + ";" + "donhiet:" + giatridonhiet + ";" + "dodong:" + giatridodong;
-  //String finalValue ="2dd";
-  //Serial.println(finalValue);
-  //chuyen doi String sang char*
-  char sendValue[50];
-  finalValue.toCharArray(sendValue, 50);
+    //String finalValue ="2dd";
+    //Serial.println(finalValue);
+    //chuyen doi String sang char*
+    char sendValue[50];
+    finalValue.toCharArray(sendValue, 50);
   */
   char sendValue[50];
   /*
@@ -119,7 +119,7 @@ void loop()
   byte buflen = VW_MAX_MESSAGE_LEN;
   String b;
   boolean flag = false;
-  
+
   if (vw_get_message(buf, &buflen)) // Non-blocking
   {
     int i;
@@ -145,18 +145,24 @@ void loop()
                       + ";" + "donhiet:" + giatridonhiet + ";" + "dodong:" + giatridodong;
   //String finalValue ="2dd";
   //delay(1000);
-  Serial.println(finalValue);
+  //Serial.println(finalValue);
   //chuyen doi String sang char*
   finalValue.toCharArray(sendValue, 50);
   const char *msg = sendValue ;
+  
   if (flag == true) {
-    vw_send((uint8_t *)msg, strlen(msg));
-    vw_wait_tx();
-    delay(200);
+    for (int i = 0; i < 1; i++) {
+      delay(100);
+      vw_send((uint8_t *)msg, strlen(msg));
+      vw_wait_tx();
+      delay(200);
+    }
+    Serial.println(msg);
     Serial.print(" da nhan");
     Serial.println();
   }
   //Serial.println();
+  flag = false;
 }
 /*
   //Gui chuoi gia tri di
