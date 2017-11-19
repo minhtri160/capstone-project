@@ -14,14 +14,11 @@ namespace APMS.DataAccess
     
     public partial class Record
     {
-        public string DeviceId { get; set; }
         public string SensorId { get; set; }
         public double Value { get; set; }
         public System.DateTime Time { get; set; }
-        public Nullable<int> State { get; set; }
-        public string Note { get; set; }
+        public int State { get; set; }
     
-        public virtual Device Device { get; set; }
         public virtual Sensor Sensor { get; set; }
     }
 }

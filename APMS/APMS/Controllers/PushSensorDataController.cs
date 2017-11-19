@@ -11,9 +11,9 @@ namespace APMS.Controllers
 {
     public class PushSensorDataController : ApiController
     {
-        public HttpStatusCode POST(PushSensorDataAPIViewModel model)
+        public HttpStatusCode POST(SaveSensorDataAPIViewModel model)
         {
-            IPushSensorDataAPI pushSensorData = new PushSensorDataAPI();
+            ISaveSensorDataAPI pushSensorData = new SaveSensorDataAPI();
             //var header = this.Request.Headers;
             //Account acc = new Account();
             //if (header.Contains("token"))

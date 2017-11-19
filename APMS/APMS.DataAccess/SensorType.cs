@@ -12,27 +12,20 @@ namespace APMS.DataAccess
     using System;
     using System.Collections.Generic;
     
-    public partial class Sensor
+    public partial class SensorType
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Sensor()
+        public SensorType()
         {
-            this.Records = new HashSet<Record>();
-            this.Rules = new HashSet<Rule>();
+            this.Sensors = new HashSet<Sensor>();
         }
     
-        public string SensorId { get; set; }
         public string SensorCode { get; set; }
-        public string DeviceId { get; set; }
-        public Nullable<double> Value { get; set; }
-        public string Unit { get; set; }
-        public Nullable<int> WarningState { get; set; }
+        public string SensorName { get; set; }
+        public string SensorInfo { get; set; }
+        public int SensorType1 { get; set; }
     
-        public virtual Device Device { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Record> Records { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Rule> Rules { get; set; }
-        public virtual SensorType SensorType { get; set; }
+        public virtual ICollection<Sensor> Sensors { get; set; }
     }
 }

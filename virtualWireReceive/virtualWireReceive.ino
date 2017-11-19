@@ -2,8 +2,8 @@
 
 const int led_pin = 13;
 const int transmit_pin = 10;
-const int receive_pin = 3;
-const int transmit_en_pin = 4;
+const int receive_pin = 2;
+const int transmit_en_pin = 3;
 const int abc = 15;
 // Dat ten hoac so hieu cho arduino.Vidu:Canh bao den, canh bao quat,...
 //hoac dat theo so
@@ -71,36 +71,37 @@ float donhiet() {
 }
 void loop()
 {
-  char copy[50];
-  String status1 = "0";
-  //Chep gia tri do duoc cua sensor vao trong cac bien String de chuan bi gui di
-  //String giatrido1 = xulydoctinhieusensor1();
-  //String giatrido2 = xulydoctinhieusensor2();
-  // String finalValue = deviceID + ";" + giatrido1 + ";" + giatrido2;
-  String giatridovong = String(dovong());
-  String giatridonhiet = String(donhiet());
-  String giatridodong = String(dodong());
-  // String finalValue = deviceID +  ";" + status1 +";" + "dovong:" + giatridovong
-  //     + ";" + "donhiet:" + giatridonhiet ;+ ";" + "dodong:" + giatridodong;
-  String finalValue = deviceID +  ";" + status1 + ";" + "dovong:" + giatridovong
-                      + ";" + "donhiet:" + giatridonhiet + ";" + "donhiet:" + giatridonhiet;
-  //Serial.println(finalValue);
-
-  //chuyen doi String sang char*
-
-  char sendValue[100];
-  finalValue.toCharArray(sendValue, 100);
-
+//  char copy[50];
+//  String status1 = "0";
+//  //Chep gia tri do duoc cua sensor vao trong cac bien String de chuan bi gui di
+//  //String giatrido1 = xulydoctinhieusensor1();
+//  //String giatrido2 = xulydoctinhieusensor2();
+//  // String finalValue = deviceID + ";" + giatrido1 + ";" + giatrido2;
+//  String giatridovong = String(dovong());
+//  String giatridonhiet = String(donhiet());
+//  String giatridodong = String(dodong());
+//  // String finalValue = deviceID +  ";" + status1 +";" + "dovong:" + giatridovong
+//  //     + ";" + "donhiet:" + giatridonhiet ;+ ";" + "dodong:" + giatridodong;
+//  String finalValue = deviceID +  ";" + status1 + ";" + "dovong:" + giatridovong
+//                      + ";" + "donhiet:" + giatridonhiet + ";" + "donhiet:" + giatridonhiet;
+//  //Serial.println(finalValue);
+//
+//  //chuyen doi String sang char*
+//
+//  char sendValue[100];
+//  finalValue.toCharArray(sendValue, 100);
+//
   byte buf[VW_MAX_MESSAGE_LEN];
   byte buflen = VW_MAX_MESSAGE_LEN;
-  //Gui chuoi gia tri di
-  const char *msg = sendValue ;
-  // vw_send((uint8_t *)msg, strlen(msg));
-  //vw_wait_tx(); // Wait until the whole message is gone
-  // delay(200);
+//  //Gui chuoi gia tri di
+//  const char *msg = sendValue ;
+//  // vw_send((uint8_t *)msg, strlen(msg));
+//  //vw_wait_tx(); // Wait until the whole message is gone
+//  // delay(200);
   String b;
   if (vw_get_message(buf, &buflen)) // Non-blocking
   {
+    digitalWrite(led_pin, HIGH);
     int i;
     Serial.print("Got: ");
     for (i = 0; i < buflen; i++)
@@ -109,14 +110,19 @@ void loop()
       String a = String(c);
       b += a;
     }
-    Serial.print(b);
-    if (b == "2dd")
-    {
+    Serial.println(b);
+    String finalValue = "da nhan:"+ b;
+    char sendValue[100];
+    finalValue.toCharArray(sendValue, 100);
+    const char *msg = sendValue ;
+//    if (b == "2dd")
+//    {
       vw_send((uint8_t *)msg, strlen(msg));
       vw_wait_tx();
       delay(200);
-      Serial.print(" da nhan");
-    }
+      Serial.print("Da rep");
+//    }
     Serial.println();
+    digitalWrite(led_pin, LOW);
   }
 }
