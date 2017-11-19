@@ -19,24 +19,16 @@ String sensorId = "1";
 //Thong bao cac cong nhan cua cac thiet bi tren arduino
 const int transmit_pin = 10;
 const int receive_pin = 2;
-const int transmit_en_pin = 3;
 
 DHT dht(DHTPIN, DHTTYPE);
-
-long randomNumber;
-
 void setup()
 {
   Serial.begin(9600);    // Debugging only
   Serial.println("Setup");
 
-  //Pzem dia chi
-  //pzem.setAddress(ip);
-
   // Initialise the IO and ISR
   vw_set_tx_pin(transmit_pin);
   vw_set_rx_pin(receive_pin);
-  vw_set_ptt_pin(transmit_en_pin);
   vw_set_ptt_inverted(true); // Required for DR3100
   vw_setup(2000);  // Bits per sec
   vw_rx_start();
