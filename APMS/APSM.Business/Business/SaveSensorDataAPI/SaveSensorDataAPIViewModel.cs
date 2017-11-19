@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace APMS.Business.API
 {
-    public class PushSensorDataAPIViewModel
+    public class SaveSensorDataAPIViewModel
     {
-        public PushSensorDataAPIViewModel()
+        public SaveSensorDataAPIViewModel()
         {
             SensorParamList = new List<SensorParam>();
         }

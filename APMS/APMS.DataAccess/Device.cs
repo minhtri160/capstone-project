@@ -17,8 +17,6 @@ namespace APMS.DataAccess
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Device()
         {
-            this.Flags = new HashSet<Flag>();
-            this.Records = new HashSet<Record>();
             this.Sensors = new HashSet<Sensor>();
         }
     
@@ -26,14 +24,12 @@ namespace APMS.DataAccess
         public string DeviceName { get; set; }
         public int DeviceType { get; set; }
         public string AccountId { get; set; }
-        public Nullable<System.DateTime> UpdateTime { get; set; }
+        public Nullable<System.DateTime> ActiveTime { get; set; }
         public Nullable<int> State { get; set; }
+        public string Position { get; set; }
+        public string Note { get; set; }
     
         public virtual Account Account { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Flag> Flags { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Record> Records { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Sensor> Sensors { get; set; }
     }

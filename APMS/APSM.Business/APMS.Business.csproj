@@ -50,9 +50,11 @@
     <Compile Include="Business\LoginWeb\ILoginWeb.cs" />
     <Compile Include="Business\LoginWeb\LoginWeb.cs" />
     <Compile Include="Business\LoginWeb\LoginWebViewModel.cs" />
-    <Compile Include="Business\PushSensorDataAPI\IPushSensorDataAPI.cs" />
-    <Compile Include="Business\PushSensorDataAPI\PushSensorDataAPI.cs" />
-    <Compile Include="Business\PushSensorDataAPI\PushSensorDataAPIViewModel.cs" />
+    <Compile Include="Business\Notification\Notification.cs" />
+    <Compile Include="Business\SaveSensorDataAPI\ISaveSensorDataAPI.cs" />
+    <Compile Include="Business\SaveSensorDataAPI\SaveSensorDataAPI.cs" />
+    <Compile Include="Business\SaveSensorDataAPI\SaveSensorDataAPIViewModel.cs" />
+    <Compile Include="Dictionary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

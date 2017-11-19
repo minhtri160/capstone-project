@@ -11,34 +11,22 @@
           </Key>
           <Property Name="AccountId" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Token" Type="nvarchar" MaxLength="50" />
-          <Property Name="Status" Type="int" />
-          <Property Name="ActiveTime" Type="datetime" />
+          <Property Name="Token" Type="nvarchar" MaxLength="15" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="AccountType" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Device">
           <Key>
             <PropertyRef Name="DeviceId" />
           </Key>
-          <Property Name="DeviceId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DeviceId" Type="nvarchar" MaxLength="5" Nullable="false" />
           <Property Name="DeviceName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="DeviceType" Type="int" Nullable="false" />
           <Property Name="AccountId" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="UpdateTime" Type="datetime" />
+          <Property Name="ActiveTime" Type="datetime" />
           <Property Name="State" Type="int" />
-        </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'APMS.dbo.Flag' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="Flag">
-          <Key>
-            <PropertyRef Name="DeviceId" />
-            <PropertyRef Name="SensorId" />
-            <PropertyRef Name="State" />
-            <PropertyRef Name="Flag" />
-          </Key>
-          <Property Name="DeviceId" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="SensorId" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="State" Type="int" Nullable="false" />
-          <Property Name="Flag" Type="bit" Nullable="false" />
+          <Property Name="Position" Type="nvarchar" MaxLength="50" />
           <Property Name="Note" Type="nvarchar" MaxLength="250" />
         </EntityType>
         <EntityType Name="Notification">
@@ -54,16 +42,13 @@ warning 6002: The table/view 'APMS.dbo.Flag' does not have a primary key defined
         </EntityType>
         <EntityType Name="Record">
           <Key>
-            <PropertyRef Name="DeviceId" />
             <PropertyRef Name="SensorId" />
             <PropertyRef Name="Time" />
           </Key>
-          <Property Name="DeviceId" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="SensorId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SensorId" Type="nvarchar" MaxLength="5" Nullable="false" />
           <Property Name="Value" Type="float" Nullable="false" />
           <Property Name="Time" Type="datetime" Nullable="false" />
-          <Property Name="State" Type="int" />
-          <Property Name="Note" Type="nvarchar" MaxLength="250" />
+          <Property Name="State" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Rule">
           <Key>
@@ -71,7 +56,7 @@ warning 6002: The table/view 'APMS.dbo.Flag' does not have a primary key defined
             <PropertyRef Name="State" />
             <PropertyRef Name="OperatorType" />
           </Key>
-          <Property Name="SensorId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SensorId" Type="nvarchar" MaxLength="5" Nullable="false" />
           <Property Name="State" Type="int" Nullable="false" />
           <Property Name="OperatorType" Type="int" Nullable="false" />
           <Property Name="Value" Type="float" />
@@ -80,23 +65,21 @@ warning 6002: The table/view 'APMS.dbo.Flag' does not have a primary key defined
           <Key>
             <PropertyRef Name="SensorId" />
           </Key>
-          <Property Name="SensorId" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="SensorName" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="DeviceId" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="AccountId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SensorId" Type="nvarchar" MaxLength="5" Nullable="false" />
+          <Property Name="SensorCode" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="DeviceId" Type="nvarchar" MaxLength="5" Nullable="false" />
           <Property Name="Value" Type="float" />
           <Property Name="Unit" Type="nvarchar" MaxLength="50" />
-          <Property Name="State" Type="int" />
+          <Property Name="WarningState" Type="int" />
         </EntityType>
-        <EntityType Name="sysdiagrams">
+        <EntityType Name="SensorType">
           <Key>
-            <PropertyRef Name="diagram_id" />
+            <PropertyRef Name="SensorCode" />
           </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
+          <Property Name="SensorCode" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="SensorName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SensorInfo" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="SensorType" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_Device_Account1">
           <End Role="Account" Type="Self.Account" Multiplicity="1" />
@@ -110,30 +93,6 @@ warning 6002: The table/view 'APMS.dbo.Flag' does not have a primary key defined
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Flag_Device">
-          <End Role="Device" Type="Self.Device" Multiplicity="1" />
-          <End Role="Flag" Type="Self.Flag" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Device">
-              <PropertyRef Name="DeviceId" />
-            </Principal>
-            <Dependent Role="Flag">
-              <PropertyRef Name="DeviceId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Flag_Sensor">
-          <End Role="Sensor" Type="Self.Sensor" Multiplicity="1" />
-          <End Role="Flag" Type="Self.Flag" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Sensor">
-              <PropertyRef Name="SensorId" />
-            </Principal>
-            <Dependent Role="Flag">
-              <PropertyRef Name="SensorId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Notification_Account">
           <End Role="Account" Type="Self.Account" Multiplicity="1" />
           <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
@@ -143,18 +102,6 @@ warning 6002: The table/view 'APMS.dbo.Flag' does not have a primary key defined
             </Principal>
             <Dependent Role="Notification">
               <PropertyRef Name="AccountId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Record_Device">
-          <End Role="Device" Type="Self.Device" Multiplicity="1" />
-          <End Role="Record" Type="Self.Record" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Device">
-              <PropertyRef Name="DeviceId" />
-            </Principal>
-            <Dependent Role="Record">
-              <PropertyRef Name="DeviceId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -182,18 +129,6 @@ warning 6002: The table/view 'APMS.dbo.Flag' does not have a primary key defined
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Sensor_Account">
-          <End Role="Account" Type="Self.Account" Multiplicity="1" />
-          <End Role="Sensor" Type="Self.Sensor" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Account">
-              <PropertyRef Name="AccountId" />
-            </Principal>
-            <Dependent Role="Sensor">
-              <PropertyRef Name="AccountId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Sensor_Device">
           <End Role="Device" Type="Self.Device" Multiplicity="1" />
           <End Role="Sensor" Type="Self.Sensor" Multiplicity="*" />
@@ -203,6 +138,18 @@ warning 6002: The table/view 'APMS.dbo.Flag' does not have a primary key defined
             </Principal>
             <Dependent Role="Sensor">
               <PropertyRef Name="DeviceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sensor_SensorType">
+          <End Role="SensorType" Type="Self.SensorType" Multiplicity="1" />
+          <End Role="Sensor" Type="Self.Sensor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SensorType">
+              <PropertyRef Name="SensorCode" />
+            </Principal>
+            <Dependent Role="Sensor">
+              <PropertyRef Name="SensorCode" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -244,35 +191,14 @@ warning 6002: The table/view 'APMS.dbo.Flag' does not have a primary key defined
           <EntitySet Name="Record" EntityType="Self.Record" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Rule" EntityType="Self.Rule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Sensor" EntityType="Self.Sensor" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Flag" EntityType="Self.Flag" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Flag].[DeviceId] AS [DeviceId], 
-    [Flag].[SensorId] AS [SensorId], 
-    [Flag].[State] AS [State], 
-    [Flag].[Flag] AS [Flag], 
-    [Flag].[Note] AS [Note]
-    FROM [dbo].[Flag] AS [Flag]</DefiningQuery>
-          </EntitySet>
+          <EntitySet Name="SensorType" EntityType="Self.SensorType" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Device_Account1" Association="Self.FK_Device_Account1">
             <End Role="Account" EntitySet="Account" />
             <End Role="Device" EntitySet="Device" />
           </AssociationSet>
-          <AssociationSet Name="FK_Flag_Device" Association="Self.FK_Flag_Device">
-            <End Role="Device" EntitySet="Device" />
-            <End Role="Flag" EntitySet="Flag" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Flag_Sensor" Association="Self.FK_Flag_Sensor">
-            <End Role="Sensor" EntitySet="Sensor" />
-            <End Role="Flag" EntitySet="Flag" />
-          </AssociationSet>
           <AssociationSet Name="FK_Notification_Account" Association="Self.FK_Notification_Account">
             <End Role="Account" EntitySet="Account" />
             <End Role="Notification" EntitySet="Notification" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Record_Device" Association="Self.FK_Record_Device">
-            <End Role="Device" EntitySet="Device" />
-            <End Role="Record" EntitySet="Record" />
           </AssociationSet>
           <AssociationSet Name="FK_Record_Sensor" Association="Self.FK_Record_Sensor">
             <End Role="Sensor" EntitySet="Sensor" />
@@ -282,12 +208,12 @@ warning 6002: The table/view 'APMS.dbo.Flag' does not have a primary key defined
             <End Role="Sensor" EntitySet="Sensor" />
             <End Role="Rule" EntitySet="Rule" />
           </AssociationSet>
-          <AssociationSet Name="FK_Sensor_Account" Association="Self.FK_Sensor_Account">
-            <End Role="Account" EntitySet="Account" />
-            <End Role="Sensor" EntitySet="Sensor" />
-          </AssociationSet>
           <AssociationSet Name="FK_Sensor_Device" Association="Self.FK_Sensor_Device">
             <End Role="Device" EntitySet="Device" />
+            <End Role="Sensor" EntitySet="Sensor" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sensor_SensorType" Association="Self.FK_Sensor_SensorType">
+            <End Role="SensorType" EntitySet="SensorType" />
             <End Role="Sensor" EntitySet="Sensor" />
           </AssociationSet>
         </EntityContainer>
@@ -295,257 +221,7 @@ warning 6002: The table/view 'APMS.dbo.Flag' does not have a primary key defined
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="APMSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Account">
-          <Key>
-            <PropertyRef Name="AccountId" />
-          </Key>
-          <Property Name="AccountId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Token" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Int32" />
-          <Property Name="ActiveTime" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Devices" Relationship="Self.FK_Device_Account1" FromRole="Account" ToRole="Device" />
-          <NavigationProperty Name="Notifications" Relationship="Self.FK_Notification_Account" FromRole="Account" ToRole="Notification" />
-          <NavigationProperty Name="Sensors" Relationship="Self.FK_Sensor_Account" FromRole="Account" ToRole="Sensor" />
-        </EntityType>
-        <EntityType Name="Device">
-          <Key>
-            <PropertyRef Name="DeviceId" />
-          </Key>
-          <Property Name="DeviceId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="DeviceName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="DeviceType" Type="Int32" Nullable="false" />
-          <Property Name="AccountId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="UpdateTime" Type="DateTime" Precision="3" />
-          <Property Name="State" Type="Int32" />
-          <NavigationProperty Name="Account" Relationship="Self.FK_Device_Account1" FromRole="Device" ToRole="Account" />
-          <NavigationProperty Name="Flags" Relationship="Self.FK_Flag_Device" FromRole="Device" ToRole="Flag" />
-          <NavigationProperty Name="Records" Relationship="Self.FK_Record_Device" FromRole="Device" ToRole="Record" />
-          <NavigationProperty Name="Sensors" Relationship="Self.FK_Sensor_Device" FromRole="Device" ToRole="Sensor" />
-        </EntityType>
-        <EntityType Name="Flag">
-          <Key>
-            <PropertyRef Name="DeviceId" />
-            <PropertyRef Name="SensorId" />
-            <PropertyRef Name="State" />
-            <PropertyRef Name="Flag1" />
-          </Key>
-          <Property Name="DeviceId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="SensorId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="State" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Device" Relationship="Self.FK_Flag_Device" FromRole="Flag" ToRole="Device" />
-          <NavigationProperty Name="Sensor" Relationship="Self.FK_Flag_Sensor" FromRole="Flag" ToRole="Sensor" />
-          <Property Name="Flag1" Type="Boolean" Nullable="false" />
-          <Property Name="Note" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="Notification">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="AccountId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Title" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Content" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="State" Type="Int32" Nullable="false" />
-          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="Account" Relationship="Self.FK_Notification_Account" FromRole="Notification" ToRole="Account" />
-        </EntityType>
-        <EntityType Name="Record">
-          <Key>
-            <PropertyRef Name="DeviceId" />
-            <PropertyRef Name="SensorId" />
-            <PropertyRef Name="Time" />
-          </Key>
-          <Property Name="DeviceId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="SensorId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Value" Type="Double" Nullable="false" />
-          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="State" Type="Int32" />
-          <Property Name="Note" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Device" Relationship="Self.FK_Record_Device" FromRole="Record" ToRole="Device" />
-          <NavigationProperty Name="Sensor" Relationship="Self.FK_Record_Sensor" FromRole="Record" ToRole="Sensor" />
-        </EntityType>
-        <EntityType Name="Rule">
-          <Key>
-            <PropertyRef Name="SensorId" />
-            <PropertyRef Name="State" />
-            <PropertyRef Name="OperatorType" />
-          </Key>
-          <Property Name="SensorId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="State" Type="Int32" Nullable="false" />
-          <Property Name="OperatorType" Type="Int32" Nullable="false" />
-          <Property Name="Value" Type="Double" />
-          <NavigationProperty Name="Sensor" Relationship="Self.FK_Rule_Sensor" FromRole="Rule" ToRole="Sensor" />
-        </EntityType>
-        <EntityType Name="Sensor">
-          <Key>
-            <PropertyRef Name="SensorId" />
-          </Key>
-          <Property Name="SensorId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="SensorName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="DeviceId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="AccountId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Value" Type="Double" />
-          <Property Name="Unit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="State" Type="Int32" />
-          <NavigationProperty Name="Account" Relationship="Self.FK_Sensor_Account" FromRole="Sensor" ToRole="Account" />
-          <NavigationProperty Name="Device" Relationship="Self.FK_Sensor_Device" FromRole="Sensor" ToRole="Device" />
-          <NavigationProperty Name="Flags" Relationship="Self.FK_Flag_Sensor" FromRole="Sensor" ToRole="Flag" />
-          <NavigationProperty Name="Records" Relationship="Self.FK_Record_Sensor" FromRole="Sensor" ToRole="Record" />
-          <NavigationProperty Name="Rules" Relationship="Self.FK_Rule_Sensor" FromRole="Sensor" ToRole="Rule" />
-        </EntityType>
-        <Association Name="FK_Device_Account1">
-          <End Role="Account" Type="Self.Account" Multiplicity="1" />
-          <End Role="Device" Type="Self.Device" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Account">
-              <PropertyRef Name="AccountId" />
-            </Principal>
-            <Dependent Role="Device">
-              <PropertyRef Name="AccountId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Notification_Account">
-          <End Role="Account" Type="Self.Account" Multiplicity="1" />
-          <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Account">
-              <PropertyRef Name="AccountId" />
-            </Principal>
-            <Dependent Role="Notification">
-              <PropertyRef Name="AccountId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Sensor_Account">
-          <End Role="Account" Type="Self.Account" Multiplicity="1" />
-          <End Role="Sensor" Type="Self.Sensor" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Account">
-              <PropertyRef Name="AccountId" />
-            </Principal>
-            <Dependent Role="Sensor">
-              <PropertyRef Name="AccountId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Flag_Device">
-          <End Role="Device" Type="Self.Device" Multiplicity="1" />
-          <End Role="Flag" Type="Self.Flag" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Device">
-              <PropertyRef Name="DeviceId" />
-            </Principal>
-            <Dependent Role="Flag">
-              <PropertyRef Name="DeviceId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Record_Device">
-          <End Role="Device" Type="Self.Device" Multiplicity="1" />
-          <End Role="Record" Type="Self.Record" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Device">
-              <PropertyRef Name="DeviceId" />
-            </Principal>
-            <Dependent Role="Record">
-              <PropertyRef Name="DeviceId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Sensor_Device">
-          <End Role="Device" Type="Self.Device" Multiplicity="1" />
-          <End Role="Sensor" Type="Self.Sensor" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Device">
-              <PropertyRef Name="DeviceId" />
-            </Principal>
-            <Dependent Role="Sensor">
-              <PropertyRef Name="DeviceId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Flag_Sensor">
-          <End Role="Sensor" Type="Self.Sensor" Multiplicity="1" />
-          <End Role="Flag" Type="Self.Flag" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Sensor">
-              <PropertyRef Name="SensorId" />
-            </Principal>
-            <Dependent Role="Flag">
-              <PropertyRef Name="SensorId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Record_Sensor">
-          <End Role="Sensor" Type="Self.Sensor" Multiplicity="1" />
-          <End Role="Record" Type="Self.Record" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Sensor">
-              <PropertyRef Name="SensorId" />
-            </Principal>
-            <Dependent Role="Record">
-              <PropertyRef Name="SensorId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Rule_Sensor">
-          <End Role="Sensor" Type="Self.Sensor" Multiplicity="1" />
-          <End Role="Rule" Type="Self.Rule" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Sensor">
-              <PropertyRef Name="SensorId" />
-            </Principal>
-            <Dependent Role="Rule">
-              <PropertyRef Name="SensorId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="APMSEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Accounts" EntityType="Self.Account" />
-          <EntitySet Name="Devices" EntityType="Self.Device" />
-          <EntitySet Name="Flags" EntityType="Self.Flag" />
-          <EntitySet Name="Notifications" EntityType="Self.Notification" />
-          <EntitySet Name="Records" EntityType="Self.Record" />
-          <EntitySet Name="Rules" EntityType="Self.Rule" />
-          <EntitySet Name="Sensors" EntityType="Self.Sensor" />
-          <AssociationSet Name="FK_Device_Account1" Association="Self.FK_Device_Account1">
-            <End Role="Account" EntitySet="Accounts" />
-            <End Role="Device" EntitySet="Devices" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Notification_Account" Association="Self.FK_Notification_Account">
-            <End Role="Account" EntitySet="Accounts" />
-            <End Role="Notification" EntitySet="Notifications" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Sensor_Account" Association="Self.FK_Sensor_Account">
-            <End Role="Account" EntitySet="Accounts" />
-            <End Role="Sensor" EntitySet="Sensors" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Flag_Device" Association="Self.FK_Flag_Device">
-            <End Role="Device" EntitySet="Devices" />
-            <End Role="Flag" EntitySet="Flags" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Record_Device" Association="Self.FK_Record_Device">
-            <End Role="Device" EntitySet="Devices" />
-            <End Role="Record" EntitySet="Records" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Sensor_Device" Association="Self.FK_Sensor_Device">
-            <End Role="Device" EntitySet="Devices" />
-            <End Role="Sensor" EntitySet="Sensors" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Flag_Sensor" Association="Self.FK_Flag_Sensor">
-            <End Role="Sensor" EntitySet="Sensors" />
-            <End Role="Flag" EntitySet="Flags" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Record_Sensor" Association="Self.FK_Record_Sensor">
-            <End Role="Sensor" EntitySet="Sensors" />
-            <End Role="Record" EntitySet="Records" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Rule_Sensor" Association="Self.FK_Rule_Sensor">
-            <End Role="Sensor" EntitySet="Sensors" />
-            <End Role="Rule" EntitySet="Rules" />
-          </AssociationSet>
           <FunctionImport Name="sp_alterdiagram">
             <Parameter Name="diagramname" Mode="In" Type="String" />
             <Parameter Name="owner_id" Mode="In" Type="Int32" />
@@ -576,7 +252,37 @@ warning 6002: The table/view 'APMS.dbo.Flag' does not have a primary key defined
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
-          <EntitySet Name="sysdiagrams" EntityType="APMSModel.sysdiagram" />
+          <EntitySet Name="Accounts" EntityType="APMSModel.Account" />
+          <EntitySet Name="Devices" EntityType="APMSModel.Device" />
+          <EntitySet Name="Notifications" EntityType="APMSModel.Notification" />
+          <EntitySet Name="Records" EntityType="APMSModel.Record" />
+          <EntitySet Name="Rules" EntityType="APMSModel.Rule" />
+          <EntitySet Name="Sensors" EntityType="APMSModel.Sensor" />
+          <EntitySet Name="SensorTypes" EntityType="APMSModel.SensorType" />
+          <AssociationSet Name="FK_Device_Account1" Association="APMSModel.FK_Device_Account1">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Device" EntitySet="Devices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Notification_Account" Association="APMSModel.FK_Notification_Account">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Notification" EntitySet="Notifications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sensor_Device" Association="APMSModel.FK_Sensor_Device">
+            <End Role="Device" EntitySet="Devices" />
+            <End Role="Sensor" EntitySet="Sensors" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Record_Sensor" Association="APMSModel.FK_Record_Sensor">
+            <End Role="Sensor" EntitySet="Sensors" />
+            <End Role="Record" EntitySet="Records" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rule_Sensor" Association="APMSModel.FK_Rule_Sensor">
+            <End Role="Sensor" EntitySet="Sensors" />
+            <End Role="Rule" EntitySet="Rules" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sensor_SensorType" Association="APMSModel.FK_Sensor_SensorType">
+            <End Role="SensorType" EntitySet="SensorTypes" />
+            <End Role="Sensor" EntitySet="Sensors" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="sp_helpdiagramdefinition_Result">
           <Property Type="Int32" Name="version" Nullable="true" />
@@ -589,103 +295,172 @@ warning 6002: The table/view 'APMS.dbo.Flag' does not have a primary key defined
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
-        <EntityType Name="sysdiagram">
+        <EntityType Name="Account">
           <Key>
-            <PropertyRef Name="diagram_id" />
+            <PropertyRef Name="AccountId" />
           </Key>
-          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="AccountId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Token" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AccountType" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Devices" Relationship="APMSModel.FK_Device_Account1" FromRole="Account" ToRole="Device" />
+          <NavigationProperty Name="Notifications" Relationship="APMSModel.FK_Notification_Account" FromRole="Account" ToRole="Notification" />
         </EntityType>
+        <EntityType Name="Device">
+          <Key>
+            <PropertyRef Name="DeviceId" />
+          </Key>
+          <Property Name="DeviceId" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="DeviceName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DeviceType" Type="Int32" Nullable="false" />
+          <Property Name="AccountId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ActiveTime" Type="DateTime" Precision="3" />
+          <Property Name="State" Type="Int32" />
+          <Property Name="Position" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Note" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Account" Relationship="APMSModel.FK_Device_Account1" FromRole="Device" ToRole="Account" />
+          <NavigationProperty Name="Sensors" Relationship="APMSModel.FK_Sensor_Device" FromRole="Device" ToRole="Sensor" />
+        </EntityType>
+        <EntityType Name="Notification">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccountId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Content" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="Int32" Nullable="false" />
+          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Account" Relationship="APMSModel.FK_Notification_Account" FromRole="Notification" ToRole="Account" />
+        </EntityType>
+        <EntityType Name="Record">
+          <Key>
+            <PropertyRef Name="SensorId" />
+            <PropertyRef Name="Time" />
+          </Key>
+          <Property Name="SensorId" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="Double" Nullable="false" />
+          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="State" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Sensor" Relationship="APMSModel.FK_Record_Sensor" FromRole="Record" ToRole="Sensor" />
+        </EntityType>
+        <EntityType Name="Rule">
+          <Key>
+            <PropertyRef Name="SensorId" />
+            <PropertyRef Name="State" />
+            <PropertyRef Name="OperatorType" />
+          </Key>
+          <Property Name="SensorId" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="Int32" Nullable="false" />
+          <Property Name="OperatorType" Type="Int32" Nullable="false" />
+          <Property Name="Value" Type="Double" />
+          <NavigationProperty Name="Sensor" Relationship="APMSModel.FK_Rule_Sensor" FromRole="Rule" ToRole="Sensor" />
+        </EntityType>
+        <EntityType Name="Sensor">
+          <Key>
+            <PropertyRef Name="SensorId" />
+          </Key>
+          <Property Name="SensorId" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="SensorCode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="DeviceId" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="Value" Type="Double" />
+          <Property Name="Unit" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="WarningState" Type="Int32" />
+          <NavigationProperty Name="Device" Relationship="APMSModel.FK_Sensor_Device" FromRole="Sensor" ToRole="Device" />
+          <NavigationProperty Name="Records" Relationship="APMSModel.FK_Record_Sensor" FromRole="Sensor" ToRole="Record" />
+          <NavigationProperty Name="Rules" Relationship="APMSModel.FK_Rule_Sensor" FromRole="Sensor" ToRole="Rule" />
+          <NavigationProperty Name="SensorType" Relationship="APMSModel.FK_Sensor_SensorType" FromRole="Sensor" ToRole="SensorType" />
+        </EntityType>
+        <EntityType Name="SensorType">
+          <Key>
+            <PropertyRef Name="SensorCode" />
+          </Key>
+          <Property Name="SensorCode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="SensorName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SensorInfo" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Sensors" Relationship="APMSModel.FK_Sensor_SensorType" FromRole="SensorType" ToRole="Sensor" />
+          <Property Name="SensorType1" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Device_Account1">
+          <End Type="APMSModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="APMSModel.Device" Role="Device" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="Device">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Notification_Account">
+          <End Type="APMSModel.Account" Role="Account" Multiplicity="1" />
+          <End Type="APMSModel.Notification" Role="Notification" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="Notification">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sensor_Device">
+          <End Type="APMSModel.Device" Role="Device" Multiplicity="1" />
+          <End Type="APMSModel.Sensor" Role="Sensor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Device">
+              <PropertyRef Name="DeviceId" />
+            </Principal>
+            <Dependent Role="Sensor">
+              <PropertyRef Name="DeviceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Record_Sensor">
+          <End Type="APMSModel.Sensor" Role="Sensor" Multiplicity="1" />
+          <End Type="APMSModel.Record" Role="Record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sensor">
+              <PropertyRef Name="SensorId" />
+            </Principal>
+            <Dependent Role="Record">
+              <PropertyRef Name="SensorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rule_Sensor">
+          <End Type="APMSModel.Sensor" Role="Sensor" Multiplicity="1" />
+          <End Type="APMSModel.Rule" Role="Rule" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sensor">
+              <PropertyRef Name="SensorId" />
+            </Principal>
+            <Dependent Role="Rule">
+              <PropertyRef Name="SensorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sensor_SensorType">
+          <End Type="APMSModel.SensorType" Role="SensorType" Multiplicity="1" />
+          <End Type="APMSModel.Sensor" Role="Sensor" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SensorType">
+              <PropertyRef Name="SensorCode" />
+            </Principal>
+            <Dependent Role="Sensor">
+              <PropertyRef Name="SensorCode" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="APMSModelStoreContainer" CdmEntityContainer="APMSEntities">
-          <EntitySetMapping Name="Accounts">
-            <EntityTypeMapping TypeName="APMSModel.Account">
-              <MappingFragment StoreEntitySet="Account">
-                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Token" ColumnName="Token" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="ActiveTime" ColumnName="ActiveTime" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Devices">
-            <EntityTypeMapping TypeName="APMSModel.Device">
-              <MappingFragment StoreEntitySet="Device">
-                <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
-                <ScalarProperty Name="DeviceName" ColumnName="DeviceName" />
-                <ScalarProperty Name="DeviceType" ColumnName="DeviceType" />
-                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
-                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
-                <ScalarProperty Name="State" ColumnName="State" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Flags">
-            <EntityTypeMapping TypeName="APMSModel.Flag">
-              <MappingFragment StoreEntitySet="Flag">
-                <ScalarProperty Name="Note" ColumnName="Note" />
-                <ScalarProperty Name="Flag1" ColumnName="Flag" />
-                <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
-                <ScalarProperty Name="SensorId" ColumnName="SensorId" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Notifications">
-            <EntityTypeMapping TypeName="APMSModel.Notification">
-              <MappingFragment StoreEntitySet="Notification">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Content" ColumnName="Content" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="Time" ColumnName="Time" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Records">
-            <EntityTypeMapping TypeName="APMSModel.Record">
-              <MappingFragment StoreEntitySet="Record">
-                <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
-                <ScalarProperty Name="SensorId" ColumnName="SensorId" />
-                <ScalarProperty Name="Value" ColumnName="Value" />
-                <ScalarProperty Name="Time" ColumnName="Time" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="Note" ColumnName="Note" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Rules">
-            <EntityTypeMapping TypeName="APMSModel.Rule">
-              <MappingFragment StoreEntitySet="Rule">
-                <ScalarProperty Name="SensorId" ColumnName="SensorId" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="OperatorType" ColumnName="OperatorType" />
-                <ScalarProperty Name="Value" ColumnName="Value" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Sensors">
-            <EntityTypeMapping TypeName="APMSModel.Sensor">
-              <MappingFragment StoreEntitySet="Sensor">
-                <ScalarProperty Name="SensorId" ColumnName="SensorId" />
-                <ScalarProperty Name="SensorName" ColumnName="SensorName" />
-                <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
-                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
-                <ScalarProperty Name="Value" ColumnName="Value" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
-                <ScalarProperty Name="State" ColumnName="State" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="APMSModel.Store.sp_alterdiagram" />
           <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="APMSModel.Store.sp_creatediagram" />
           <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="APMSModel.Store.sp_dropdiagram" />
@@ -710,18 +485,87 @@ warning 6002: The table/view 'APMS.dbo.Flag' does not have a primary key defined
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="APMSModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="APMSModel.Store.sp_upgraddiagrams" />
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="APMSModel.sysdiagram">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="definition" ColumnName="definition" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="name" ColumnName="name" />
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="APMSModel.Account">
+              <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="AccountType" ColumnName="AccountType" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          <EntitySetMapping Name="Devices">
+            <EntityTypeMapping TypeName="APMSModel.Device">
+              <MappingFragment StoreEntitySet="Device">
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="ActiveTime" ColumnName="ActiveTime" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="DeviceType" ColumnName="DeviceType" />
+                <ScalarProperty Name="DeviceName" ColumnName="DeviceName" />
+                <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Notifications">
+            <EntityTypeMapping TypeName="APMSModel.Notification">
+              <MappingFragment StoreEntitySet="Notification">
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Records">
+            <EntityTypeMapping TypeName="APMSModel.Record">
+              <MappingFragment StoreEntitySet="Record">
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="SensorId" ColumnName="SensorId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Rules">
+            <EntityTypeMapping TypeName="APMSModel.Rule">
+              <MappingFragment StoreEntitySet="Rule">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="OperatorType" ColumnName="OperatorType" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="SensorId" ColumnName="SensorId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sensors">
+            <EntityTypeMapping TypeName="APMSModel.Sensor">
+              <MappingFragment StoreEntitySet="Sensor">
+                <ScalarProperty Name="WarningState" ColumnName="WarningState" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
+                <ScalarProperty Name="SensorCode" ColumnName="SensorCode" />
+                <ScalarProperty Name="SensorId" ColumnName="SensorId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SensorTypes">
+            <EntityTypeMapping TypeName="APMSModel.SensorType">
+              <MappingFragment StoreEntitySet="SensorType">
+                <ScalarProperty Name="SensorType1" ColumnName="SensorType" />
+                <ScalarProperty Name="SensorInfo" ColumnName="SensorInfo" />
+                <ScalarProperty Name="SensorName" ColumnName="SensorName" />
+                <ScalarProperty Name="SensorCode" ColumnName="SensorCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>
