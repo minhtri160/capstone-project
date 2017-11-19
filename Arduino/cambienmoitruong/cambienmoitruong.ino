@@ -4,7 +4,7 @@
 
 // Dat ten hoac so hieu cho arduino.Vidu:Canh bao den, canh bao quat,...
 //hoac dat theo so
-String deviceID = "aadf";
+String deviceID = "httc8";
 
 //Dat ten hoac so cho cac cam bien gan vao arduino
 String sensorId = "1";
@@ -13,12 +13,13 @@ String sensorId = "1";
 #define DHTPIN 9 //sensor nhietdo doam.
 #define DHTTYPE DHT22
 #define sensorKhiGas A3//mq2
-#define sensorLua A2
-#define sensorKhoi A1
+#define sensorLua 7
+#define sensorKhoi 8
 
 //Thong bao cac cong nhan cua cac thiet bi tren arduino
 const int transmit_pin = 10;
 const int receive_pin = 2;
+
 
 DHT dht(DHTPIN, DHTTYPE);
 void setup()
@@ -29,17 +30,17 @@ void setup()
   // Initialise the IO and ISR
   vw_set_tx_pin(transmit_pin);
   vw_set_rx_pin(receive_pin);
+  vw_set_ptt_pin(3);
   vw_set_ptt_inverted(true); // Required for DR3100
   vw_setup(2000);  // Bits per sec
   vw_rx_start();
   //Thiet lap xuat nhap cho arduino
   // pinMode(sensorSang, INPUT);
   pinMode(sensorLua, INPUT);
-  pinMode(sensorKhiGas, INPUT);
+  //pinMode(sensorKhiGas, INPUT);
   pinMode(sensorKhoi, INPUT);
   dht.begin();
 }
-
 
 float doDoAm() {
   //delay(1000);
@@ -47,10 +48,7 @@ float doDoAm() {
   return h;
 }
 float doNhiet() {
-  //delay(1000);
-  // float h = dht.readHumidity();
   float t = dht.readTemperature();
-  // String value = "Doam:" + String(h) + ";NhietDo:" + String(t);
   return t;
 }
 String doKhiGas() {
@@ -60,13 +58,12 @@ String doKhiGas() {
 }
 
 String doLua() {
-  int dataRead = analogRead(sensorLua);
+  int dataRead = digitalRead(sensorLua);
   String result = String(dataRead);
   return result;
 }
-
 String doKhoi() {
-  long smoke = analogRead(sensorKhoi);
+  int smoke = digitalRead(sensorKhoi);
   String result = String(smoke);
   return result;
 }
@@ -105,8 +102,8 @@ void loop()
   String finalValue = deviceID +  ";" + status1 + ";" + "Khoi:" + giatrikhoi + ";" + "Gas:" + giatrikhigas + ";"
                       + "Nhietdo:" + giatrinhietdo + ";" + "Do am:" + giatridoam + ";" + "Lửa:" + giatriLua;
 
-  Serial.println(finalValue);
-  char sendValue[100];
+  //Serial.println(finalValue);
+  char sendValue[50];
   //chuyen doi String sang char*
   finalValue.toCharArray(sendValue, 50);
   const char *msg = sendValue ;
