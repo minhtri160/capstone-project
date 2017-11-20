@@ -8,8 +8,11 @@ namespace APMS.Web.Controllers
 {
     public class HomeController : Controller
     {
+        [AuthorizationFilter]
+        [HttpGet]
         public ActionResult Index()
         {
+
             return View();
         }
 

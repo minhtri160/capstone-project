@@ -44,6 +44,8 @@
     <Compile Include="Business\GetDevicesAPI\GetDeviceAPIViewModel.cs" />
     <Compile Include="Business\GetDevicesAPI\GetDeviceAPI.cs" />
     <Compile Include="Business\GetDevicesAPI\IGetDeviceAPI.cs" />
+    <Compile Include="Business\HomeWeb\HomeViewModel.cs" />
+    <Compile Include="Business\HomeWeb\HomeWeb.cs" />
     <Compile Include="Business\LoginAPI\ILoginAPI.cs" />
     <Compile Include="Business\LoginAPI\LoginAPI.cs" />
     <Compile Include="Business\LoginAPI\LoginAPIViewModel.cs" />
@@ -63,8 +65,6 @@
       <Name>APMS.DataAccess</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Business\HomeWeb\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
