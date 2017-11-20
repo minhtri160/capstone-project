@@ -78,12 +78,12 @@ void loop()
   if  (getRFValue == (deviceID + "1")) {
     turnOn();
     deviceStatus = "1";
-    Serial.print("Bat Den!");
+    Serial.print("Light is ON!");
   }
   if (getRFValue == (deviceID + "0")) {
     turnOff();
     deviceStatus = "0";
-    Serial.print("Tat Den!");
+    Serial.print("Light is OFF!");
   }
   //Serial.print(getRFValue[5]);
   //Serial.println();

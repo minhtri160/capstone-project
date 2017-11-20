@@ -6606,6 +6606,7 @@
     <Content Include="Content\dist\img\credit\paypal2.png" />
     <Content Include="Content\dist\img\credit\visa.png" />
     <Content Include="Content\dist\img\default-50x50.gif" />
+    <Content Include="Content\dist\img\haha.png" />
     <Content Include="Content\dist\img\icons.png" />
     <Content Include="Content\dist\img\photo1.png" />
     <Content Include="Content\dist\img\photo2.png" />
