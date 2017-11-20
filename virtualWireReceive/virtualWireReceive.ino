@@ -115,13 +115,13 @@ void loop()
     char sendValue[100];
     finalValue.toCharArray(sendValue, 100);
     const char *msg = sendValue ;
-//    if (b == "2dd")
-//    {
+    if (b == "2dd")
+    {
       vw_send((uint8_t *)msg, strlen(msg));
       vw_wait_tx();
       delay(200);
       Serial.print("Da rep");
-//    }
+    }
     Serial.println();
     digitalWrite(led_pin, LOW);
   }

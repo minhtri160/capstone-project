@@ -9,7 +9,7 @@ String status1 = "1";
 //Thong bao cac cong nhan cua cac thiet bi tren arduino
 const int transmit_pin = 10;
 const int receive_pin = 2;
-//const int transmit_en_pin = 3;
+const int transmit_en_pin = 3;
 
 
 void setup() {
@@ -18,7 +18,7 @@ void setup() {
   Serial.println("Setup");
   vw_set_tx_pin(transmit_pin);
   vw_set_rx_pin(receive_pin);
-  //vw_set_ptt_pin(transmit_en_pin);
+  vw_set_ptt_pin(transmit_en_pin);
   vw_set_ptt_inverted(true); // Required for DR3100
   vw_setup(2000);  // Bits per sec
   vw_rx_start();       // Start the receiver PLL running
@@ -29,9 +29,9 @@ void setup() {
 
 void loop() {
   String str1 = "Movement " + String(digitalRead(MovementSensor));
-  Serial.println(str1);
+  //Serial.println(str1);
   String str2 = "Human Detect: " + String(digitalRead(HumanDetect));
-  Serial.println(str2);
+  //Serial.println(str2);
   String finalValue = deviceID + ";" +status1 + ";" + str1 + ";" + str2;
   byte buf[VW_MAX_MESSAGE_LEN];
   byte buflen = VW_MAX_MESSAGE_LEN;
@@ -49,7 +49,7 @@ void loop() {
       String a = String(c);
       b += a;
     }
-    Serial.print(b);
+    Serial.println(b);
     if (b == deviceID)
     {
       flag = true;
