@@ -21,8 +21,9 @@ namespace APMS.Business.Web
         {
             SensorList = new List<Sensor>();
         }
-        public Device(DataAccess.Device device) 
+        public Device(DataAccess.Device device)
         {
+            SensorList = new List<Sensor>();
             DeviceId = device.DeviceId;
             DeviceName = device.DeviceName;
             DeviceType = device.DeviceType;

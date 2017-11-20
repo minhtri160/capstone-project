@@ -46,6 +46,7 @@
     <Compile Include="Business\GetDevicesAPI\IGetDeviceAPI.cs" />
     <Compile Include="Business\HomeWeb\HomeViewModel.cs" />
     <Compile Include="Business\HomeWeb\HomeWeb.cs" />
+    <Compile Include="Business\HomeWeb\IHomeWeb.cs" />
     <Compile Include="Business\LoginAPI\ILoginAPI.cs" />
     <Compile Include="Business\LoginAPI\LoginAPI.cs" />
     <Compile Include="Business\LoginAPI\LoginAPIViewModel.cs" />

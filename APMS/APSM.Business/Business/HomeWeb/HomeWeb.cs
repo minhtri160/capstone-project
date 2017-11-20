@@ -7,7 +7,7 @@ using APMS.DataAccess;
 
 namespace APMS.Business.Web
 {
-    public class HomeWeb
+    public class HomeWeb: IHomeWeb
     {
         public HomeViewModel GetDeviceListByAccountId(string accountId)
         {

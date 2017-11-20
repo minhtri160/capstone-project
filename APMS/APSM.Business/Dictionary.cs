@@ -63,4 +63,13 @@ namespace APMS.Business.Dictionary
         HasMotion = 13,
         Others = 14
     }
+
+    public enum DeviceType : int
+    {
+        Fan = 0,
+        LighBulb = 1,
+        Environment = 2,
+        Fire = 3,
+        Security = 4
+    }
 }
