@@ -52,11 +52,17 @@ namespace APMS.Web.Controllers
         public ActionResult Login(LoginWebViewModel model)
         {   
             ILoginWeb login = new LoginWeb();
+            if (model.Username == null || model.Password == null)
+            {
+                model.Password = "";
+                model.ErrMessage = "Username or Password can't be empty!";
+                return View(model);
+            }
             Account account = login.CheckUser(model);
             if (account == null)
             {
                 model.Password = "";
-                model.ErrMessage = "Username or Password is wrong!!!";
+                model.ErrMessage = "Username or Password is wrong!";
                 return View(model);
             }
             Session["Account"] = account;
