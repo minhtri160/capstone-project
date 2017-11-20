@@ -51,7 +51,7 @@ namespace APMS.Business.Web
 
         public void SendWarningSensorStateNotification(DataAccess.Sensor sensor)
         {
-            Device currentDevice = sensor.Device;
+            DataAccess.Device currentDevice = sensor.Device;
             DataAccess.Notification notification = new DataAccess.Notification();
 
             notification.AccountId = currentDevice.AccountId;
