@@ -306,6 +306,9 @@
                                             </span>
                                         </h2>
                                     </span>
+                                    <span hidden class="icon">
+                                        <i class="ion ion-alert-circled">Waning: </i>
+                                    </span>
                                     @foreach (var sensor in device.SensorList)
                                     {
                                         <span class="info-box-text">@(sensor.SensorName + ":") <span id="@sensor.SensorId">@(sensor.Value)</span> @( " " + sensor.Unit)</span>
