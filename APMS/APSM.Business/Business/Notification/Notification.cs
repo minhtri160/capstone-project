@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace APMS.Business.Web
 {
-    public class Notification
+    public static class Notification
     {
         public static List<DataAccess.Notification> notificationRemainingList = new List<DataAccess.Notification>();
         private static void SendNotification(DataAccess.Notification notification)
@@ -18,7 +18,7 @@ namespace APMS.Business.Web
             
         }
 
-        private string GetWarningMessage(int warningState)
+        private static string GetWarningMessage(int warningState)
         {
             string warningMessage = "";
             if (warningState == (int)WarningState.FanSlow)
@@ -52,7 +52,7 @@ namespace APMS.Business.Web
             return warningMessage;
         }
 
-        public void SendWarningSensorStateNotification(DataAccess.Sensor sensor)
+        public static void SendWarningSensorStateNotification(DataAccess.Sensor sensor)
         {
             DataAccess.Device currentDevice = sensor.Device;
             DataAccess.Notification notification = new DataAccess.Notification();

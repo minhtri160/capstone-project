@@ -19,8 +19,11 @@
     <link rel="stylesheet" href="~/Content/bower_components/Ionicons/css/ionicons.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="~/Content/dist/css/AdminLTE.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="~/Scripts/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.2.min.js"></script>
+    <script src="~/signalr/hubs" type="text/javascript"></script>
+    <script src="~/Scripts/SignalR/SignalR.js"></script>
     <!-- AdminLTE Skins. Choose a skin from the css/skins
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="~/Content/dist/css/skins/_all-skins.min.css">
@@ -302,8 +305,9 @@
                         {
                             state = "Off";
                         }
+
                         <div class="col-lg-4 col-xs-12  ">
-                            <div class="@colorClass" onclick="location.href = '';">
+                            <div class="@colorClass" id="fan">
                                 <div class="inner">
                                     <span class="info-box-text"><b>@device.DeviceName</b></span>
                                     <span class="info-box-number">
@@ -311,17 +315,20 @@
                                             Status: <span id="@device.DeviceId">@state</span>
                                         </h2>
                                     </span>
-                                    <span hidden class="icon">
-                                        <i class="ion ion-alert-circled">Waning: </i>
-                                    </span>
                                     @foreach (var sensor in device.SensorList)
                                     {
-                                        <span class="info-box-text">@(sensor.SensorName + ":") <span id="@sensor.SensorId">@(sensor.Value)</span> @( " " + sensor.Unit)</span>
+                                        <span class="info-box-text">
+                                            @(sensor.SensorName + ":") <span id="@sensor.SensorId">@(sensor.Value)</span> @( " " + sensor.Unit)
+                                            @if (sensor.WarningState != 0)
+                                            {<img id="@(sensor.SensorId+"w")" style="width: 30px" ; src="~/Content/dist/img/warning-logo.png" />}
+                                        </span>
+
+
                                     }<br />
                                 </div>
                                 <div class="icon">
-                                    
-                                        <span class="ion ion-alert-circled">@("      " )</span>
+
+                                    @*<span class="ion ion-alert-circled">@("      " )</span>*@
                                     <span><i class="@iClass"></i></span>
                                 </div>
                                 <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
@@ -540,9 +547,10 @@
     </div>
     <!-- ./wrapper -->
     <!-- jQuery 3 -->
+    <!--
     <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap 3.3.7 -->
-    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!--<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>-->
     <!-- SlimScroll -->
     <script src="~/Content/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
     <!-- FastClick -->
