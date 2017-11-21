@@ -2,17 +2,20 @@
 using APMS.DataAccess;
 using APMS.Business.Dictionary;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace APMS.Business.Web
 {
     public class Notification
     {
-        private void SendNotification(DataAccess.Notification notification)
+        public static List<DataAccess.Notification> notificationRemainingList = new List<DataAccess.Notification>();
+        private static void SendNotification(DataAccess.Notification notification)
         {
             IRepository<DataAccess.Notification> notificationRepository = new Repository<DataAccess.Notification>();
 
             notificationRepository.Insert(notification);
-            //  send notification to android here
+            notificationRemainingList.Add(notification);
+            
         }
 
         private string GetWarningMessage(int warningState)
@@ -65,7 +68,7 @@ namespace APMS.Business.Web
             SendNotification(notification);
         }
 
-        public void SendWarningDisconnectionNotification(string AccountId)
+        public static void SendWarningDisconnectionNotification(string AccountId)
         {
             DataAccess.Notification notification = new DataAccess.Notification();
             notification.AccountId = AccountId;

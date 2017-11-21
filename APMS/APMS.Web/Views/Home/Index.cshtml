@@ -271,27 +271,27 @@
                         string state;
                         if (device.DeviceType == (int)APMS.Business.Dictionary.DeviceType.LighBulb)
                         {
-                            colorClass = "small-box white bg-teal-active";
+                            colorClass = "small-box white bg-green-active";
                             iClass = "ion ion-lightbulb";
                         }
                         else if (device.DeviceType == (int)APMS.Business.Dictionary.DeviceType.Fan)
                         {
-                            colorClass = "small-box bg-purple-active";
+                            colorClass = "small-box bg-green-active";
                             iClass = "ion ion-lightbulb";
                         }
                         else if (device.DeviceType == (int)APMS.Business.Dictionary.DeviceType.Environment)
                         {
-                            colorClass = "small-box bg-olive-active";
+                            colorClass = "small-box bg-green-active";
                             iClass = "ion ion-thermometer";
                         }
                         else if (device.DeviceType == (int)APMS.Business.Dictionary.DeviceType.Fire)
                         {
-                            colorClass = "small-box bg-red-active";
+                            colorClass = "small-box bg-green-active";
                             iClass = "ion ion-fireball";
                         }
                         else if (device.DeviceType == (int)APMS.Business.Dictionary.DeviceType.Security)
                         {
-                            colorClass = "small-box bg-yellow-active";
+                            colorClass = "small-box bg-green-active";
                             iClass = "ion ion-lightbulb";
                         }
                         if (device.State == 1)
@@ -302,7 +302,7 @@
                         {
                             state = "Off";
                         }
-                        <div class="col-lg-4 col-xs-8">
+                        <div class="col-lg-4 col-xs-12  ">
                             <div class="@colorClass" onclick="location.href = '';">
                                 <div class="inner">
                                     <span class="info-box-text"><b>@device.DeviceName</b></span>
@@ -320,91 +320,14 @@
                                     }<br />
                                 </div>
                                 <div class="icon">
-                                    <i class="@iClass"></i>
+                                    
+                                        <span class="ion ion-alert-circled">@("      " )</span>
+                                    <span><i class="@iClass"></i></span>
                                 </div>
                                 <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
 
-                        @*
-                            if (device.DeviceType == (int)APMS.Business.Dictionary.DeviceType.Fan)
-                            {
-                                <div class="col-lg-4 col-xs-8">
-                                    <div class="small-box bg-purple-active" onclick="location.href = '';">
-                                        <div class="inner">
-                                            <span class="info-box-text"><b>Fan</b></span>
-                                            <span class="info-box-number"><h2>Status: <span>Off</span></h2></span>
-                                            <span class="info-box-text">123 RPM</span>
-                                            <span class="info-box-text">Voltage</span>
-                                            <span class="info-box-text"></span><br />
-                                        </div>
-                                        <div class="icon">
-                                            <i class="ion ion-lightbulb"></i>
-                                        </div>
-                                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                                    </div>
-                                </div>
-                            }
-
-                            if (device.DeviceType == (int)APMS.Business.Dictionary.DeviceType.Environment)
-                            {
-                                <div class="col-lg-4 col-xs-8">
-                                    <div class="small-box bg-olive-active" onclick="location.href = '';">
-                                        <div class="inner">
-                                            <span class="info-box-text"><b>environment</b></span>
-                                            <span class="info-box-number"><h2>Status: Off</h2></span>
-                                            <span class="info-box-text">Temperature</span>
-                                            <span class="info-box-text">Humidity</span>
-                                            <span class="info-box-text">Warter leakage: Not detect</span>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="ion ion-thermometer"></i>
-                                        </div>
-                                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-
-                                    </div>
-                                </div>
-                            }
-
-                            if (device.DeviceType == (int)APMS.Business.Dictionary.DeviceType.Fire)
-                            {
-                                <div class="col-lg-4 col-xs-8">
-                                    <div class="small-box bg-red-active" onclick="location.href = '';">
-                                        <div class="inner">
-                                            <span class="info-box-text"><b>Fire Warning</b></span>
-                                            <span class="info-box-number"><h2>Status: Off</h2></span>
-                                            <span class="info-box-text">Status: Off</span>
-                                            <span class="info-box-text">Fire detection: not detect</span>
-                                            <span class="info-box-text">Smoke detection: not detect</span>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="ion ion-fireball"></i>
-                                        </div>
-                                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                                    </div>
-                                </div>
-                            }
-
-                            if (device.DeviceType == (int)APMS.Business.Dictionary.DeviceType.Security)
-                            {
-
-                                <div class="col-lg-4 col-xs-8">
-                                    <div class="small-box bg-yellow-active" onclick="location.href = '';">
-                                        <div class="inner">
-                                            <span class="info-box-text"><b>Security</b></span>
-                                            <span class="info-box-number"><h2>Status: Off</h2></span>
-                                            <span class="info-box-text">Motion detection: not detect</span>
-
-
-                                        </div>
-                                        <div class="icon">
-                                            <i></i>
-                                        </div>
-                                        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
-                                    </div>
-                                </div>
-                            }
-                        *@
                     }
                 </div>
             </section>

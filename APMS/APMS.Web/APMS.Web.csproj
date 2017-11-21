@@ -7287,6 +7287,7 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\SignalR\SignalR.js" />
     <Content Include="Source\assets\apps\css\inbox.css" />
     <Content Include="Source\assets\apps\css\inbox.min.css" />
     <Content Include="Source\assets\apps\css\todo-2.css" />
