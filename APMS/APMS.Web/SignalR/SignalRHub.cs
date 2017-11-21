@@ -4,24 +4,48 @@ using System.Linq;
 using System.Web;
 using Microsoft.AspNet.SignalR;
 using System.Threading.Tasks;
+using APMS.Business.Web;
+using System.Timers;
 
 namespace APMS.Web
 {
     public class SignalRHub : Hub
     {
-        private static List<string> raspberryConnectionIdList = new List<string>();
+        public Timer timer;
+
+        public SignalRHub()
+        {
+            timer = new Timer();
+            timer.Interval = 1000;
+            timer.Elapsed += OnTimeEvent;
+        }
+
+        private void OnTimeEvent(Object source, System.Timers.ElapsedEventArgs e)
+        {
+            Notification();
+        }
+
+        private static Dictionary<string, string> raspberryConnectionIdAccountIdDic = new Dictionary<string, string>();
         public async Task JoinGroup(string accountId, bool isRaspberry = false)
         {
             if (isRaspberry)
             {
-                raspberryConnectionIdList.Add(Context.ConnectionId);
+                try
+                {
+                    raspberryConnectionIdAccountIdDic.Add(Context.ConnectionId, accountId);
+                }
+                catch
+                {
+
+                }
             }
             await Groups.Add(Context.ConnectionId, accountId);
         }
 
         public void PushSensorData(string accountId, string deviceId, int state, string sensorValue)
         {
-            Clients.Group(accountId).GetSensorData(deviceId, state, sensorValue);
+            int warningState = 0;
+            Clients.Group(accountId).GetSensorData(deviceId, state, sensorValue, warningState);
         }
 
         public void RemoteDevice(string accountId, string deviceId, int state)
@@ -29,12 +53,19 @@ namespace APMS.Web
             Clients.Group(accountId).Remote(deviceId, state);
         }
 
+        public void Notification()
+        {
+            foreach(var item in APMS.Business.Web.Notification.notificationRemainingList)
+            {
+                Clients.Group(item.AccountId).Notification(item.Title);
+            }
+        }
+
         public override Task OnDisconnected(bool stopCalled)
         {
-            string raspberryConnectionId = raspberryConnectionIdList.Find(x => x.Equals(Context.ConnectionId));
-            if (raspberryConnectionId!= null || !raspberryConnectionId.Trim().Equals(""))
+            if (raspberryConnectionIdAccountIdDic.ContainsKey(Context.ConnectionId))
             {
-                //notification
+                Business.Web.Notification.SendWarningDisconnectionNotification(raspberryConnectionIdAccountIdDic[Context.ConnectionId]);
             }
             return base.OnDisconnected(stopCalled);
         }
