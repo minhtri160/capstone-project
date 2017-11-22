@@ -53,6 +53,7 @@ void turnOff() {
 //Main program
 void loop()
 {
+  char sendValue[50];
   byte buf[VW_MAX_MESSAGE_LEN];
   byte buflen = VW_MAX_MESSAGE_LEN;
   String getRFValue;
@@ -91,7 +92,6 @@ void loop()
   String finalValue = deviceID +  "; " + deviceStatus + "; " + checkLight();
 
   //Serial.println(finalValue);
-  char sendValue[50];
   //chuyen doi String sang char*
   finalValue.toCharArray(sendValue, 50);
   const char *msg = sendValue ;

@@ -77,7 +77,7 @@ float dovong() {
 }
 float dodong() {
   for (int i = 0; i < 1000; i++) {
-    Voltage = (Voltage + (.0049 * analogRead(A5)));   // (5 V / 1024 = 0.0049) which converter Measured analog input voltage to 5 V Range
+    Voltage = (Voltage + (0.0049 * analogRead(A5)));   // (5 V / 1024 = 0.0049) which converter Measured analog input voltage to 5 V Range
     return Voltage = 0;
   }
   Voltage = Voltage / 1000;
