@@ -22,5 +22,6 @@ namespace APMS.Business.API
     {
         public string SensorId { get; set; }
         public double? Value { get; set; }
+        public int WarningState { get; set; }
     }
 }

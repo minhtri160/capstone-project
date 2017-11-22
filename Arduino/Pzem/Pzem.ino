@@ -5,7 +5,7 @@
 PZEM004T pzem(&Serial1); // RX,TX
 IPAddress ip(192, 168, 1, 1);
 
-String deviceID = "aadf";
+String deviceID = "aadf9";
 
 //Thong bao cac cong nhan cua cac thiet bi tren arduino
 const int transmit_pin = 4;
@@ -63,7 +63,7 @@ void loop() {
   String giatrido = dodong();
   String finalValue = deviceID +  ";" + status1 + ";" + giatrido;
   Serial.println(finalValue);
-  char sendValue[100];
+  char sendValue[50];
   //chuyen doi String sang char*
   finalValue.toCharArray(sendValue, 50);
   const char *msg = sendValue ;

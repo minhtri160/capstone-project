@@ -125,7 +125,7 @@ namespace APMS.Business.API
             
         }
 
-        public bool SaveData(SaveSensorDataAPIViewModel model)
+        public SaveSensorDataAPIViewModel SaveData(SaveSensorDataAPIViewModel model)
         {
             DateTime Now = DateTime.Now;
 
@@ -137,7 +137,7 @@ namespace APMS.Business.API
             APMS.DataAccess.Device currentDevice = deviceReposiotory.GetAll().Where(x => x.DeviceId.Equals(model.DeviceId.Trim())).FirstOrDefault();
             List<APMS.DataAccess.Sensor> sensorList = sensorReposiotory.GetAll().ToList();
             if (currentDevice == null)
-                return false;
+                return null;
             else
             {
                 currentDevice.ActiveTime = Now;
@@ -145,8 +145,9 @@ namespace APMS.Business.API
                 deviceReposiotory.Update(currentDevice);
             }
 
-            foreach (var item in model.SensorParamList)
+            for (int i=0; i<model.SensorParamList.Count;i++) 
             {
+                var item = model.SensorParamList[i];
                 var currentSensor = sensorList.Find(x => x.SensorId.Equals(item.SensorId.Trim()));
                 if (currentSensor != null)
                 {
@@ -157,21 +158,23 @@ namespace APMS.Business.API
                     record.State = model.State;
                     recordReposiotory.Insert(record);
                     int warningState = GetWarningStateByValue(record);
+                    model.SensorParamList[i].WarningState = warningState;
+
 
                     if (warningState != currentSensor.WarningState)
                     {
+                        currentSensor.WarningState = warningState;
                         if (warningState!=0)
                         {
-                            //notification
+                            Business.Web.Notification.SendWarningSensorStateNotification(currentSensor);
                         }
-                        currentSensor.WarningState = warningState;
                     }
                     currentSensor.Value = item.Value;
                     sensorReposiotory.Update(currentSensor);
                 }
             }
 
-            return true;
+            return model;
         }
     }
 }

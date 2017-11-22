@@ -1,6 +1,11 @@
-﻿function SignalR() {
-    var hub=$.connection.SignalRHub;
-    hub.clients.GetSensorData = function (deviceId, state, sensorValue, warningState) {
+﻿$(document).ready(function () {
+    SignalR();
+})
+
+function SignalR() {
+    //alert("starting signalr");
+    var hub = $.connection.signalRHub;
+    hub.client.getSensorData = function (deviceId, state, sensorValue) {
         var stateString = "Off";
         if (state != 0)
         {
@@ -11,25 +16,29 @@
         for (item in listSensor) {
             var sensorValue = item.split(":");
             $('#' + sensorValue[0]).html(sensorValue[1]);
+            if (sensorValue[2] == "0")
+                $('#' + sensor[0] + 'w').hide();
+            else
+                $('#' + sensor[0] + 'w').show();
         }
 
-        if (warningState != 0) {
-            //warning
-        }
+        
     };
 
-    hub.clients.notification = function (title) {
+    hub.client.notification = function (title) {
         alert('You have 1 new notification: '+title);
     };
 
-    hub.clients.remote = function (device, state)
+    hub.client.remote = function (deviceId, state)
     {
-        alert(device);
+        alert(deviceId+" " +state);
     }
 
     $.connection.hub.start().done(function () {
+        
         var accountId = $('#accountId').val();
-        hub.server.JoinGroup(accountId);
+        hub.server.joinGroup(accountId, false);
+        alert(accountId);
         var stateString = $('#deviceId').val();
         var state = 0;
         if (stateString == "On")
@@ -37,5 +46,9 @@
         function remote(id) {
             hub.server.RemoteDevice(accountId, id, state);
         }
+        $('#fan').click(function () {
+            alert("clicked!");
+            hub.server.remoteDevice(accountId, 'abc123', 1);
+        })
     })
 }

@@ -21,8 +21,8 @@ namespace APMS.Controllers
             //    string token = header.GetValues("token").First();
             //    acc = AuthorizeToken.Authorize(token);
             //}
-            bool result = pushSensorData.SaveData(model);
-            if (!result)
+            //bool result = pushSensorData.SaveData(model);
+            //if (!result)
                 return HttpStatusCode.BadRequest;
             return HttpStatusCode.OK;
         }

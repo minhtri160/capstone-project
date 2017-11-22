@@ -15,6 +15,7 @@ String sensorId = "1";
 #define sensorKhiGas A3//mq2
 #define sensorLua 7
 #define sensorKhoi 8
+#define senserRoRi 6
 
 //Thong bao cac cong nhan cua cac thiet bi tren arduino
 const int transmit_pin = 10;
@@ -22,6 +23,7 @@ const int receive_pin = 2;
 
 
 DHT dht(DHTPIN, DHTTYPE);
+
 void setup()
 {
   Serial.begin(9600);    // Debugging only
@@ -39,6 +41,7 @@ void setup()
   pinMode(sensorLua, INPUT);
   //pinMode(sensorKhiGas, INPUT);
   pinMode(sensorKhoi, INPUT);
+  pinMode(senserRoRi, INPUT);
   dht.begin();
 }
 
@@ -67,7 +70,11 @@ String doKhoi() {
   String result = String(smoke);
   return result;
 }
-
+String xuLiRoRiNuoc() {
+  int value = digitalRead(senserRoRi);
+  String result = String(value);
+  return result;
+}
 void loop()
 {
   byte buf[VW_MAX_MESSAGE_LEN];
@@ -99,8 +106,11 @@ void loop()
   String giatrikhigas = doKhiGas();
   String giatrikhoi = String(doKhoi());
   String giatriLua = doLua();
-  String finalValue = deviceID +  ";" + status1 + ";" + "Khoi:" + giatrikhoi + ";" + "Gas:" + giatrikhigas + ";"
-                      + "Nhietdo:" + giatrinhietdo + ";" + "Do am:" + giatridoam + ";" + "Lửa:" + giatriLua;
+  String gitriRoRi = xuLiRoRiNuoc();
+  String finalValue = deviceID +  ";" + status1 + ";" + "Khoi:" + giatrikhoi + ";"
+                      + "Gas:" + giatrikhigas + ";" + "Nhietdo:" + giatrinhietdo + ";"
+                      + "Do am:" + giatridoam + ";" + "Lửa:" + giatriLua + ";"
+                      + "Ro ri:" + xuLiRoRiNuoc;
 
   //Serial.println(finalValue);
   char sendValue[50];
