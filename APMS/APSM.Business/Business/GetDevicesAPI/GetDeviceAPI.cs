@@ -4,7 +4,7 @@ using APMS.DataAccess;
 
 namespace APMS.Business.API
 {
-    public class GetDevice : IGetDeviceAPI
+    public class GetDeviceAPI : IGetDeviceAPI
     {
         public GetDeviceAPIViewModel Get(string accountId)
         {

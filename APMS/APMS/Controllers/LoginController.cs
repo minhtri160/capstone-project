@@ -11,30 +11,24 @@ namespace APMS.Controllers
 {
     public class LoginController : ApiController
     {
-        public ResponseViewModel POST(LoginAPIViewModel model)
+        public HttpResponseMessage POST(LoginAPIViewModel model)
         {
             ILoginAPI loginBusiness = new LoginAPI();
-            ResponseViewModel response = new ResponseViewModel();
+            
+            ResponseLoginAPIViewModel response = new ResponseLoginAPIViewModel();
             if (model != null)
             {
                 APMS.DataAccess.Account acc = loginBusiness.Login(model);
 
-                if (acc == null)
+                if (acc != null)
                 {
-                    response.HasErr = true;
-                    response.ErrInfo = "Tài khoản hoặc mật khẩu không đúng!";
-                }
-                else
-                {
-                    response.ResponseObj = acc;
+                    IGetDeviceAPI getDevice = new GetDeviceAPI();
+                    response.Channel = acc.Channel;
+                    response.DeviceList = getDevice.Get(acc.AccountId).DeviceList;
+                    return Request.CreateResponse(HttpStatusCode.OK, response);
                 }
             }
-            else
-            {
-                response.HasErr = true;
-                response.ErrInfo = "Model null!";
-            }
-            return response;
+            return Request.CreateResponse(HttpStatusCode.Unauthorized);
         }
     }
 }
