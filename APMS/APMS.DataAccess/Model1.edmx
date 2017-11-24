@@ -15,6 +15,7 @@
           <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="AccountType" Type="int" Nullable="false" />
+          <Property Name="Channel" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="Device">
           <Key>
@@ -307,6 +308,7 @@
           <Property Name="AccountType" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Devices" Relationship="APMSModel.FK_Device_Account1" FromRole="Account" ToRole="Device" />
           <NavigationProperty Name="Notifications" Relationship="APMSModel.FK_Notification_Account" FromRole="Account" ToRole="Notification" />
+          <Property Name="Channel" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Device">
           <Key>
@@ -488,6 +490,7 @@
           <EntitySetMapping Name="Accounts">
             <EntityTypeMapping TypeName="APMSModel.Account">
               <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
                 <ScalarProperty Name="AccountType" ColumnName="AccountType" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />

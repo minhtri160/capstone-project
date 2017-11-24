@@ -66,7 +66,7 @@
                         <li class="dropdown notifications-menu">
                             <a href="#" class="" data-toggle="dropdown" aria-expanded="true">
                                 <i class="fa fa-bell-o"></i>
-                                <span class="label label-warning">10</span>
+                                <span class="label label-danger" style="font-size:15px">*</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="header">You have 10 notifications</li>
@@ -183,10 +183,7 @@
                                 <i class="fa fa-angle-left pull-right"></i>
                             </span>
                         </a>
-                        <ul class="treeview-menu">
-                            <li><a href="../../index.html"><i class="fa fa-circle-o"></i> Dashboard v1</a></li>
-                            <li><a href="../../index2.html"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
-                        </ul>
+                    
                     </li>
 
                 </ul>
@@ -203,10 +200,7 @@
                     Measure Components
                     <small>version 1.0</small>
                 </h1>
-                <ol class="breadcrumb">
-                    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-
-                </ol>
+             
             </section>
 
             <!-- Main content -->
@@ -277,7 +271,7 @@
                                     @*<span class="ion ion-alert-circled">@("      " )</span>*@
                                     <span><i class="@iClass"></i></span>
                                 </div>
-                                <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+                                <a href="~/Views/Home/MoreInfo.cshtml" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
 
@@ -305,10 +299,10 @@
     </div>
     <!-- ./wrapper -->
     <!-- jQuery 3 -->
-    <!--
+    
     <script src="~/Content/bower_components/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap 3.3.7 -->
-    <!--<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>-->
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- SlimScroll -->
     <script src="~/Content/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
     <!-- FastClick -->

@@ -11,4 +11,14 @@ namespace APMS.Business.API
         public string Username { get; set; }
         public string Password { get; set; }
     }
+
+    public class ResponseLoginAPIViewModel
+    {
+        public ResponseLoginAPIViewModel()
+        {
+            DeviceList = new List<Device>();
+        }
+        public string Channel { get; set; }
+        public List<Device> DeviceList { get; set; }
+    }
 }

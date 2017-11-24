@@ -11,9 +11,9 @@ namespace APMS.Controllers
 {
     public class GetDeviceController : ApiController
     {
-        public GetDeviceAPIViewModel POST()
+        public HttpResponseMessage POST()
         {
-            IGetDeviceAPI getDeviceAPI = new GetDevice();
+            IGetDeviceAPI getDeviceAPI = new GetDeviceAPI();
             var header = this.Request.Headers;
             Account acc = new Account();
             if (header.Contains("token"))
@@ -22,7 +22,7 @@ namespace APMS.Controllers
                 acc = AuthorizeToken.Authorize(token);
             }
             GetDeviceAPIViewModel model = getDeviceAPI.Get(acc.AccountId);
-            return model;
+            return null;
         }
     }
 }
