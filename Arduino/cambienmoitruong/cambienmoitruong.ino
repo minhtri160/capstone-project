@@ -4,18 +4,24 @@
 
 // Dat ten hoac so hieu cho arduino.Vidu:Canh bao den, canh bao quat,...
 //hoac dat theo so
-String deviceID = "httc8";
+String deviceID = "mtia8";
+String gasSensorID = "gesp1";
+String fireSensorID = "eifw6";
+String smokeSensorID = "ekma5";
+String leakSensorID = "keet7";
+String temperatureSensorID = "ppet9";
+String humiditySensorID = "msyu4";
 
 //Dat ten hoac so cho cac cam bien gan vao arduino
-String sensorId = "1";
+String sensorId = "";
 
 //Thong bao cac cong cho sensor tren arduino
 #define DHTPIN 9 //sensor nhietdo doam.
 #define DHTTYPE DHT22
-#define sensorKhiGas A3//mq2
-#define sensorLua 7
-#define sensorKhoi 8
-#define senserRoRi 6
+#define gasSensor 5//mq2
+#define fireSensor 7
+#define smokeSensor 8
+#define leakWaterSenser 6
 
 //Thong bao cac cong nhan cua cac thiet bi tren arduino
 const int transmit_pin = 10;
@@ -38,42 +44,41 @@ void setup()
   vw_rx_start();
   //Thiet lap xuat nhap cho arduino
   // pinMode(sensorSang, INPUT);
-  pinMode(sensorLua, INPUT);
-  //pinMode(sensorKhiGas, INPUT);
-  pinMode(sensorKhoi, INPUT);
-  pinMode(senserRoRi, INPUT);
+  pinMode(fireSensor, INPUT);
+  pinMode(gasSensor, INPUT);
+  pinMode(smokeSensor, INPUT);
+  pinMode(leakWaterSenser, INPUT);
   dht.begin();
 }
 
-float doDoAm() {
-  //delay(1000);
-  float h = dht.readHumidity();
-  return h;
+float humidityCalculation() {
+  float humidity = dht.readHumidity();
+  return humidity;
 }
-float doNhiet() {
-  float t = dht.readTemperature();
-  return t;
+float temperatureCalculation() {
+  float temperature = dht.readTemperature();
+  return temperature;
 }
-String doKhiGas() {
-  float gas = analogRead(sensorKhiGas);
+String gasSensorCalculation() {
+  int gas = digitalRead(gasSensor);
   String value = String(gas);
   return value;
 }
 
-String doLua() {
-  int dataRead = digitalRead(sensorLua);
-  String result = String(dataRead);
-  return result;
+String fireSensorCalculation() {
+  int fire = digitalRead(fireSensor);
+  String value = String(fire);
+  return value;
 }
-String doKhoi() {
-  int smoke = digitalRead(sensorKhoi);
-  String result = String(smoke);
-  return result;
+String smokeSensorCalculation() {
+  int smoke = digitalRead(smokeSensor);
+  String value = String(smoke);
+  return value;
 }
-String xuLiRoRiNuoc() {
-  int value = digitalRead(senserRoRi);
-  String result = String(value);
-  return result;
+String waterLeakSensorCalculation() {
+  int leak = digitalRead(leakWaterSenser);
+  String value = String(leak);
+  return value;
 }
 void loop()
 {
@@ -101,18 +106,17 @@ void loop()
 
   String status1 = "0";
   //Chep gia tri do duoc cua sensor vao trong cac bien String de chuan bi gui di
-  String giatrinhietdo = String(doNhiet());
-  String giatridoam = String(doDoAm());
-  String giatrikhigas = doKhiGas();
-  String giatrikhoi = String(doKhoi());
-  String giatriLua = doLua();
-  String gitriRoRi = xuLiRoRiNuoc();
-  String finalValue = deviceID +  ";" + status1 + ";" + "Khoi:" + giatrikhoi + ";"
-                      + "Gas:" + giatrikhigas + ";" + "Nhietdo:" + giatrinhietdo + ";"
-                      + "Do am:" + giatridoam + ";" + "Lửa:" + giatriLua + ";"
-                      + "Ro ri:" + xuLiRoRiNuoc;
-
-  //Serial.println(finalValue);
+  String temperatureValue = String(temperatureCalculation());
+  String humidityValue = String(humidityCalculation());
+  String gasValue = gasSensorCalculation();
+  String smokeValue = smokeSensorCalculation();
+  String fireValue = fireSensorCalculation();
+  String leakWaterValue = waterLeakSensorCalculation();
+  String finalValue = deviceID +  ";" + status1 + ";" + temperatureSensorID + ":" + temperatureValue + ";"
+                      + humiditySensorID + ":" + humidityValue + ";" + gasSensorID + ":" + gasValue + ";"
+                      + smokeSensorID + ":" + smokeValue + ";" + fireSensorID + ":" + fireValue + ";"
+                      + leakSensorID + ":" + leakWaterValue;
+  Serial.println(finalValue);
   char sendValue[50];
   //chuyen doi String sang char*
   finalValue.toCharArray(sendValue, 50);
@@ -124,4 +128,5 @@ void loop()
     Serial.print(" da nhan");
     Serial.println();
   }
+  flag = false;
 }

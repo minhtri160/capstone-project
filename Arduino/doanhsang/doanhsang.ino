@@ -3,10 +3,13 @@
 
 //Initialise Device ID
 String deviceID = "httc8";
+String lightSensorID = "lmgh1";
+String isElectricSensorID = "efga6";
 
 //Define sensor input pin on arduino
 #define lightSensor 8
 #define relayControl 6
+#define checkElectric 5
 
 //Define RF transmit and receive pin on arduino
 const int transmit_pin = 10;
@@ -31,13 +34,28 @@ void setup()
   //Set Input and Output for sensor
   pinMode(lightSensor, INPUT);
   pinMode(relayControl, OUTPUT);
+  pinMode(checkElectric, INPUT);
 
 }
 
 //Check if Light Bulb is emit or not
 String checkLight() {
-  String value = "Light:" + String(digitalRead(lightSensor));
-  return value;
+  int value = digitalRead(lightSensor);
+  int value1 = 0;
+  if ( value == 0 ) {
+    value1 = 1;
+  } else {
+    value1 = 0;
+  }
+  String returnvalue = String(value1);
+  return returnvalue;
+}
+
+//Check if there is electric
+String checkElect() {
+  int value = digitalRead(checkElectric);
+  String returnvalue = String(value);
+  return returnvalue;
 }
 
 //Turn on Device
@@ -88,10 +106,12 @@ void loop()
   }
   //Serial.print(getRFValue[5]);
   //Serial.println();
-
-  String finalValue = deviceID +  "; " + deviceStatus + "; " + checkLight();
-
-  //Serial.println(finalValue);
+  String elect = checkElect();
+  String light = checkLight();
+  String finalValue = deviceID +  ";" + deviceStatus + ";" + isElectricSensorID + ":" + elect
+                      + ";" + lightSensorID + ":" + light;
+  //Serial.println(elect);Serial.println(light);
+  Serial.println(finalValue);
   //chuyen doi String sang char*
   finalValue.toCharArray(sendValue, 50);
   const char *msg = sendValue ;
@@ -102,4 +122,5 @@ void loop()
     Serial.print(" Sent!");
     Serial.println();
   }
+  flag = false;
 }

@@ -1,10 +1,10 @@
 #include <VirtualWire.h>
 
-const int MovementSensor = 4;
-const int HumanDetect = 5;
+String deviceID = "hmna7";
+String humanSensorID = "zxpu2";
 
-String deviceID = "abc123";
-String status1 = "1";
+//Define sensor input pin on arduino
+#define humanSensor 5
 
 //Thong bao cac cong nhan cua cac thiet bi tren arduino
 const int transmit_pin = 10;
@@ -23,19 +23,24 @@ void setup() {
   vw_setup(2000);  // Bits per sec
   vw_rx_start();       // Start the receiver PLL running
   //Thiet lap xuat nhap cho arduino
-  pinMode(MovementSensor, INPUT);
-  pinMode(HumanDetect, INPUT);
+  pinMode(humanSensor, INPUT);
+}
+
+String checkHumanMovement() {
+  String value = String(digitalRead(humanSensor));
+  return value;
 }
 
 void loop() {
-  String str1 = "Movement " + String(digitalRead(MovementSensor));
-  //Serial.println(str1);
-  String str2 = "Human Detect: " + String(digitalRead(HumanDetect));
-  //Serial.println(str2);
-  String finalValue = deviceID + ";" +status1 + ";" + str1 + ";" + str2;
+  String deviceStatus ="1";
+  String value = checkHumanMovement();
+  String finalValue = deviceID + ";" + deviceStatus + ";" + humanSensorID + ":" + value;
+  //Serial.println(finalValue);
+  
   byte buf[VW_MAX_MESSAGE_LEN];
   byte buflen = VW_MAX_MESSAGE_LEN;
-  String b; boolean flag = false;
+  String getRFValue;
+  boolean flag = false;
   char sendValue[50];
   finalValue.toCharArray(sendValue, 50);
   const char *msg = sendValue ;
@@ -46,11 +51,10 @@ void loop() {
     for (i = 0; i < buflen; i++)
     {
       char c = buf[i];
-      String a = String(c);
-      b += a;
+      getRFValue += String(c);
     }
-    Serial.println(b);
-    if (b == deviceID)
+    //Serial.println(getRFValue);
+    if (getRFValue == deviceID)
     {
       flag = true;
     }
@@ -62,10 +66,11 @@ void loop() {
       vw_wait_tx();
       delay(200);
     }
-    Serial.println(msg);
-    Serial.print(" da nhan");
-    Serial.println();
+    //Serial.println(msg);
+    //Serial.print(" da nhan");
+    //Serial.println();
   }
   //Serial.println();
   flag = false;
+  //delay(100);
 }

@@ -2,14 +2,19 @@
 #include <PZEM004T.h>
 #include <VirtualWire.h>
 
-PZEM004T pzem(&Serial1); // RX,TX
+PZEM004T pzem(&Serial); // RX,TX
 IPAddress ip(192, 168, 1, 1);
 
-String deviceID = "aadf9";
+String deviceID = "pmez5";
+String voltageSensorID = "apmt3";
+String currentSensorID = "velk5";
+String powerSensorID = "rwep9";
+int  deviceStatus = 0;
 
 //Thong bao cac cong nhan cua cac thiet bi tren arduino
-const int transmit_pin = 4;
+const int transmit_pin = 10;
 const int receive_pin = 2;
+const int transmit_en_pin = 3;
 
 void setup() {
   Serial.begin(9600);
@@ -18,27 +23,35 @@ void setup() {
   // Initialise the IO and ISR
   vw_set_tx_pin(transmit_pin);
   vw_set_rx_pin(receive_pin);
+  vw_set_ptt_pin(transmit_en_pin);
   vw_set_ptt_inverted(true); // Required for DR3100
   vw_setup(2000);  // Bits per sec
   vw_rx_start();
 }
-String dodong() {
+String votageSensor() {
   float v = pzem.voltage(ip);
-  if (v < 0.0) v = 0.0;
+  if (v < 0.0){
+    v = 0.0;
+    deviceStatus=1;
+  }
   String voltageValue = String(v);
-
+  return voltageValue;
+}
+String currentSensor() {
   float i = pzem.current(ip);
   if (i < 0.0) i = 0.0;
   String currentValue = String(i);
-
-  String value = "Ap:" + voltageValue + "V;Dong:" + currentValue + "A";
-  return value;
+  return currentValue;
+}
+String powerSensor() {
+  float p = pzem.power(ip);
+  String powerValue = String(p);
 }
 
 void loop() {
   byte buf[VW_MAX_MESSAGE_LEN];
   byte buflen = VW_MAX_MESSAGE_LEN;
-  String b;
+  String getRFValue;
   boolean flag = false;
 
   if (vw_get_message(buf, &buflen)) // Non-blocking
@@ -48,20 +61,23 @@ void loop() {
     for (i = 0; i < buflen; i++)
     {
       char c = buf[i];
-      String a = String(c);
-      b += a;
+      getRFValue += String(c);
     }
-    Serial.print(b);
-    if (b == deviceID)
+    Serial.print(getRFValue);
+    if (getRFValue == deviceID)
     {
       flag = true;
     }
   }
 
-  String status1 = "0";
   //Chep gia tri do duoc cua sensor vao trong cac bien String de chuan bi gui di
-  String giatrido = dodong();
-  String finalValue = deviceID +  ";" + status1 + ";" + giatrido;
+  String voltageValue = votageSensor();
+  String currentValue = currentSensor();
+  String powerValue = powerSensor();
+  String finalValue = deviceID +  ";" + deviceStatus + ";" + voltageSensorID + ":" + voltageValue
+                      + ";" + currentSensorID + ":" + currentValue + ";" + powerSensorID 
+                      + ":" + powerValue;
+
   Serial.println(finalValue);
   char sendValue[50];
   //chuyen doi String sang char*
@@ -74,5 +90,5 @@ void loop() {
     Serial.print(" da nhan");
     Serial.println();
   }
-
+  flag = false;
 }

@@ -1,17 +1,25 @@
 #include <VirtualWire.h>
 
 //Initialise Device ID
-String deviceID = "def789";
+<<<<<<< HEAD
+String deviceID = "qttd9";
+=======
+String deviceID = "quat1";
+String SensorIDnhiet = "t2v2c:";
+String SensorIDvong ="e1b3n:";
+String SensorIDDong ="e1b4m:";
+
+>>>>>>> 6e40a0f073bafb8908682ac366841965e09f0bf9
 
 //Define sensor input pin on arduino
 #define relayControl 6
-#define PIN_DO 18// vong quay
+#define PIN_DO 3// vong quay
 int sensorPin = A1;//nhiet do
 
 //Thong bao cac cong nhan cua cac thiet bi tren arduino
 const int transmit_pin = 10;
 const int receive_pin = 2;
-const int transmit_en_pin = 3;
+const int transmit_en_pin = 4;
 
 //Initialise global variable
 #define HOLES_DISC 2
@@ -35,7 +43,7 @@ void setup()
   vw_set_rx_pin(receive_pin);
   vw_set_ptt_pin(transmit_en_pin);
   vw_set_ptt_inverted(true); // Required for DR3100
-  vw_setup(2500);  // Bits per sec
+  vw_setup(2000);  // Bits per sec
   vw_rx_start();       // Start the receiver PLL running
 
   //Thiet lap xuat nhap cho arduino
@@ -75,6 +83,7 @@ float dovong() {
   }
   return rpm;
 }
+/*
 float dodong() {
   for (int i = 0; i < 1000; i++) {
     Voltage = (Voltage + (0.0049 * analogRead(A5)));   // (5 V / 1024 = 0.0049) which converter Measured analog input voltage to 5 V Range
@@ -88,6 +97,7 @@ float dodong() {
   Serial.print("\t Current (A) = ");   // shows the voltage measured
   Serial.print(Current, 2);
 }
+*/
 
 //Turn on Device
 void turnOn() {
@@ -136,9 +146,16 @@ void loop()
   //Chep gia tri do duoc cua sensor vao trong cac bien String de chuan bi gui di
   String giatridovong = String(dovong());
   String giatridonhiet = String(donhiet());
-  String giatridodong = String(dodong());
+<<<<<<< HEAD
+  //String giatridodong = String(dodong());
   String finalValue = deviceID +  ";" + deviceStatus + ";" + "dovong:" + giatridovong
-                      + ";" + "donhiet:" + giatridonhiet + ";" + "dodong:" + giatridodong;
+                      + ";" + "donhiet:" + giatridonhiet //+ ";" + "dodong:" + giatridodong;
+=======
+  String giatridodong = String(dodong());
+ String finalValue = deviceID +  ";" + deviceStatus + ";" +SensorIDnhiet + giatridovong
+  + ";" +SensorIDvong + giatridonhiet + ";" + SensorIDDong + giatridodong;
+
+>>>>>>> 6e40a0f073bafb8908682ac366841965e09f0bf9
   Serial.println(finalValue);
   //chuyen doi String sang char*
   finalValue.toCharArray(sendValue, 50);
@@ -147,8 +164,9 @@ void loop()
     vw_send((uint8_t *)msg, strlen(msg));
     vw_wait_tx();
     delay(200);
-    Serial.print(" da nhan");
+    Serial.print(" da gui");
     Serial.println();
   }
   //Serial.println();
+  flag=false;
 }
