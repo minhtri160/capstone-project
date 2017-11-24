@@ -1,25 +1,16 @@
 #include <VirtualWire.h>
 
 //Initialise Device ID
- 
- 
- 
- 
- 
 String deviceID = "quat1";
-String SensorIDnhiet = "t2v2c:";
-String SensorIDvong ="e1b3n:";
-String SensorIDDong ="e1b4m:";
-
- 
- 
- 
- 
+String temperatureSensorID = "t2v2c";
+String rotationSensorID = "e1b3n";
+String electricSensorID = "e1b4m";
 
 //Define sensor input pin on arduino
 #define relayControl 6
-#define PIN_DO 3// vong quay
-int sensorPin = A1;//nhiet do
+#define rotationSensor 3// vong quay
+#define checkElectricSensor 7
+#define temperatureSensor A1 //nhiet do
 
 //Thong bao cac cong nhan cua cac thiet bi tren arduino
 const int transmit_pin = 10;
@@ -38,10 +29,9 @@ void setup()
 {
   Serial.begin(9600);    // Debugging only
   Serial.println("Setup");
-  pinMode(PIN_DO, INPUT);
   pulses = 0;
   timeOld = 0;
-  attachInterrupt(digitalPinToInterrupt(PIN_DO), counter, FALLING);
+  attachInterrupt(digitalPinToInterrupt(rotationSensor), counter, FALLING);
 
   // Initialise the IO and ISR
   vw_set_tx_pin(transmit_pin);
@@ -52,8 +42,11 @@ void setup()
   vw_rx_start();       // Start the receiver PLL running
 
   //Thiet lap xuat nhap cho arduino
+  pinMode(rotationSensor, INPUT);
+  pinMode(relayControl, OUTPUT);
+  pinMode(checkElectricSensor, INPUT);
+  pinMode(temperatureSensor, INPUT);
 }
-
 
 void counter()
 {
@@ -62,47 +55,35 @@ void counter()
 
 
 float donhiet() {
-  int reading = analogRead(sensorPin);
-  float voltage = reading * 5.0 / 1024.0;
+  int temp = analogRead(temperatureSensor);
+  float voltage = temp * 5.0 / 1024.0;
 
   // ở trên mình đã giới thiệu, cứ mỗi 10mV = 1 độ C.
   // Vì vậy nếu biến voltage là biến lưu hiệu điện thế (đơn vị Volt)
   // thì ta chỉ việc nhân voltage cho 100 là ra được nhiệt độ!
 
-  float temp = voltage * 100.0;
+  float tempValue = voltage * 100.0;
   //Serial.println("Nhiệt độ =\t");
   //Serial.println(temp);
-  return temp;
+  return tempValue;
 }
 
 float dovong() {
   if (millis() - timeOld >= 1000)
   {
-    detachInterrupt(digitalPinToInterrupt(PIN_DO));
+    detachInterrupt(digitalPinToInterrupt(rotationSensor));
     rpm = (pulses * 60) / (HOLES_DISC);
     timeOld = millis();
     pulses = 0;
-    attachInterrupt(digitalPinToInterrupt(PIN_DO), counter, FALLING);
-    int reading = analogRead(sensorPin);
-
+    attachInterrupt(digitalPinToInterrupt(rotationSensor), counter, FALLING);
+    int reading = analogRead(rotationSensor);
   }
   return rpm;
 }
-/*
-float dodong() {
-  for (int i = 0; i < 1000; i++) {
-    Voltage = (Voltage + (0.0049 * analogRead(A5)));   // (5 V / 1024 = 0.0049) which converter Measured analog input voltage to 5 V Range
-    return Voltage = 0;
-  }
-  Voltage = Voltage / 1000;
-  Current = (Voltage - 2.5) / 0.185; // Sensed voltage is converter to current
-
-  Serial.print("\n Voltage Sensed (V) = "); // shows the measured voltage
-  Serial.print(Voltage, 2); // the '2' after voltage allows you to display 2  digits after decimal point
-  Serial.print("\t Current (A) = ");   // shows the voltage measured
-  Serial.print(Current, 2);
+int checkElectric() {
+  int value = digitalRead(checkElectricSensor);
+  return value;
 }
-*/
 
 //Turn on Device
 void turnOn() {
@@ -151,22 +132,9 @@ void loop()
   //Chep gia tri do duoc cua sensor vao trong cac bien String de chuan bi gui di
   String giatridovong = String(dovong());
   String giatridonhiet = String(donhiet());
- 
- /*
-  //String giatridodong = String(dodong());
-  //String finalValue = deviceID +  ";" + deviceStatus + ";" + "dovong:" + giatridovong
-                      //+ ";" + "donhiet:" + giatridonhiet + ";" + "dodong:" + giatridodong;
- */
- 
- 
- //String giatridodong = String(dodong());
- String finalValue = deviceID +  ";" + deviceStatus + ";" +SensorIDnhiet + giatridovong
-  + ";" +SensorIDvong + giatridonhiet + ";" /*+ SensorIDDong + giatridodong*/;
-
- 
- 
- 
- 
+  String giatridien = String(checkElectric());
+  String finalValue = deviceID +  ";" + deviceStatus + ";" + rotationSensorID + ":" + giatridovong
+                      + ";" + temperatureSensorID + ":" + giatridonhiet + ";" + electricSensorID + ":" + giatridien;
   Serial.println(finalValue);
   //chuyen doi String sang char*
   finalValue.toCharArray(sendValue, 50);
@@ -179,5 +147,5 @@ void loop()
     Serial.println();
   }
   //Serial.println();
-  flag=false;
+  flag = false;
 }
