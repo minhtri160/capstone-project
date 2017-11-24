@@ -1,21 +1,20 @@
 #include <VirtualWire.h>
 
 //Initialise Device ID
-<<<<<<< HEAD
-<<<<<<< HEAD
-String deviceID = "qttd9";
-=======
-=======
->>>>>>> 6e40a0f073bafb8908682ac366841965e09f0bf9
+ 
+ 
+ 
+ 
+ 
 String deviceID = "quat1";
 String SensorIDnhiet = "t2v2c:";
 String SensorIDvong ="e1b3n:";
 String SensorIDDong ="e1b4m:";
 
-<<<<<<< HEAD
->>>>>>> 6e40a0f073bafb8908682ac366841965e09f0bf9
-=======
->>>>>>> 6e40a0f073bafb8908682ac366841965e09f0bf9
+ 
+ 
+ 
+ 
 
 //Define sensor input pin on arduino
 #define relayControl 6
@@ -152,22 +151,22 @@ void loop()
   //Chep gia tri do duoc cua sensor vao trong cac bien String de chuan bi gui di
   String giatridovong = String(dovong());
   String giatridonhiet = String(donhiet());
-<<<<<<< HEAD
-<<<<<<< HEAD
+ 
+ /*
   //String giatridodong = String(dodong());
-  String finalValue = deviceID +  ";" + deviceStatus + ";" + "dovong:" + giatridovong
-                      + ";" + "donhiet:" + giatridonhiet //+ ";" + "dodong:" + giatridodong;
-=======
-=======
->>>>>>> 6e40a0f073bafb8908682ac366841965e09f0bf9
-  String giatridodong = String(dodong());
+  //String finalValue = deviceID +  ";" + deviceStatus + ";" + "dovong:" + giatridovong
+                      //+ ";" + "donhiet:" + giatridonhiet + ";" + "dodong:" + giatridodong;
+ */
+ 
+ 
+ //String giatridodong = String(dodong());
  String finalValue = deviceID +  ";" + deviceStatus + ";" +SensorIDnhiet + giatridovong
-  + ";" +SensorIDvong + giatridonhiet + ";" + SensorIDDong + giatridodong;
+  + ";" +SensorIDvong + giatridonhiet + ";" /*+ SensorIDDong + giatridodong*/;
 
-<<<<<<< HEAD
->>>>>>> 6e40a0f073bafb8908682ac366841965e09f0bf9
-=======
->>>>>>> 6e40a0f073bafb8908682ac366841965e09f0bf9
+ 
+ 
+ 
+ 
   Serial.println(finalValue);
   //chuyen doi String sang char*
   finalValue.toCharArray(sendValue, 50);
