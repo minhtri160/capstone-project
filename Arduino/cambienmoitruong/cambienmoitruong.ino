@@ -18,7 +18,7 @@ String sensorId = "";
 //Thong bao cac cong cho sensor tren arduino
 #define DHTPIN 9 //sensor nhietdo doam.
 #define DHTTYPE DHT22
-#define gasSensor 5//mq2
+#define gasSensor A1//mq2
 #define fireSensor 7
 #define smokeSensor 8
 #define leakWaterSenser 6
@@ -60,8 +60,15 @@ float temperatureCalculation() {
   return temperature;
 }
 String gasSensorCalculation() {
-  int gas = digitalRead(gasSensor);
-  String value = String(gas);
+  long gas = analogRead(gasSensor);
+  String value = "";
+  if (gas > 100) {
+    value = "1";
+  } else if (gas < 100) {
+    value = "0";
+  }
+  //String a = String(gas);
+  //return a;
   return value;
 }
 
@@ -77,7 +84,12 @@ String smokeSensorCalculation() {
 }
 String waterLeakSensorCalculation() {
   int leak = digitalRead(leakWaterSenser);
-  String value = String(leak);
+  String value = "";
+  if (leak == 1) {
+    value = "0";
+  } else if (leak == 0) {
+    value = "1";
+  }
   return value;
 }
 void loop()

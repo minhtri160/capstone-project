@@ -39,5 +39,5 @@ void loop() {
                       + ";" + currentSensorID + ":" + currentValue + ";" + powerSensorID
                       + ":" + powerValue;
 
-  Serial.print(finalValue);
+  Serial.print4(finalValue);
 }
