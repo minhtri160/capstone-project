@@ -7,6 +7,7 @@ String rotationSensorID = "e1b3n";
 String electricSensorID = "e1b4m";
 
 //Define sensor input pin on arduino
+
 #define relayControl 6
 #define rotationSensor 3// vong quay
 #define checkElectricSensor 7
@@ -24,6 +25,7 @@ double Current = 0;
 float rpm;
 unsigned long timeOld;
 volatile unsigned int pulses;
+String deviceStatus = "0";
 
 void setup()
 {
@@ -101,7 +103,7 @@ void loop()
   byte buflen = VW_MAX_MESSAGE_LEN;
   String getRFValue;
   boolean flag = false;
-  String deviceStatus = "0";
+
 
   if (vw_get_message(buf, &buflen)) // Non-blocking
   {

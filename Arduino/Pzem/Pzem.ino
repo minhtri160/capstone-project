@@ -79,9 +79,9 @@ void loop() {
                       + ":" + powerValue;
 
   Serial.println(finalValue);
-  char sendValue[50];
+  char sendValue[100];
   //chuyen doi String sang char*
-  finalValue.toCharArray(sendValue, 50);
+  finalValue.toCharArray(sendValue, 100);
   const char *msg = sendValue ;
   if (flag == true) {
     vw_send((uint8_t *)msg, strlen(msg));

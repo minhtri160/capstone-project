@@ -5,6 +5,7 @@
 String deviceID = "httc8";
 String lightSensorID = "lmgh1";
 String isElectricSensorID = "efga6";
+String deviceStatus = "0";
 
 //Define sensor input pin on arduino
 #define lightSensor 8
@@ -76,7 +77,7 @@ void loop()
   byte buflen = VW_MAX_MESSAGE_LEN;
   String getRFValue;
   boolean flag = false;
-  String deviceStatus = "0";
+  
 
   if (vw_get_message(buf, &buflen)) // Non-blocking
   {
