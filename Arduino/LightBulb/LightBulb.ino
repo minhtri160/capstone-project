@@ -5,24 +5,25 @@
 String deviceID = "httc8";
 String lightSensorID = "lmgh1";
 String isElectricSensorID = "efga6";
-String deviceStatus = "0";
 
 //Define sensor input pin on arduino
 #define lightSensor 8
 #define relayControl 6
-#define checkElectric 5
+#define checkElectricSensor 5
 
 //Define RF transmit and receive pin on arduino
 const int transmit_pin = 10;
 const int receive_pin = 2;
 const int transmit_en_pin = 3;
 
-//Another Define pin on arduino
+//Initialise Global variable
+String deviceStatus = "0";
 
+//Startup setup for program
 void setup()
 {
   Serial.begin(9600);    // Debugging only
-  //Serial.println("Setup");--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  Serial.println("Setup");
 
   // Initialise the IO and ISR
   vw_set_tx_pin(transmit_pin);
@@ -35,26 +36,26 @@ void setup()
   //Set Input and Output for sensor
   pinMode(lightSensor, INPUT);
   pinMode(relayControl, OUTPUT);
-  pinMode(checkElectric, INPUT);
+  pinMode(checkElectricSensor, INPUT);
 
 }
 
-//Check if Light Bulb is emit or not
-String checkLight() {
-  int value = digitalRead(lightSensor);
-  int value1 = 0;
-  if ( value == 0 ) {
-    value1 = 1;
+//Check if Light Bulb is emitted or not
+String checkLightStatus() {
+  int light = digitalRead(lightSensor);
+  int value = 0;
+  if ( light == 0 ) {
+    value = 1;
   } else {
-    value1 = 0;
+    value = 0;
   }
-  String returnvalue = String(value1);
-  return returnvalue;
+  String returnValue = String(value);
+  return returnValue;
 }
 
 //Check if there is electric
-String checkElect() {
-  int value = digitalRead(checkElectric);
+String checkElectStatus() {
+  int value = digitalRead(checkElectricSensor);
   String returnvalue = String(value);
   return returnvalue;
 }
@@ -72,13 +73,15 @@ void turnOff() {
 //Main program
 void loop()
 {
+  //Initialise variable
   char sendValue[50];
+  const char *msg = sendValue ;
   byte buf[VW_MAX_MESSAGE_LEN];
   byte buflen = VW_MAX_MESSAGE_LEN;
   String getRFValue;
   boolean flag = false;
 
-
+  //Checking if there is any RF message sent
   if (vw_get_message(buf, &buflen)) // Non-blocking
   {
     int i;
@@ -88,16 +91,13 @@ void loop()
       char c = buf[i];
       getRFValue += String(c);
     }
-
-   
-    
-    //Serial.print(getRFValue);
-    //Serial.println();
   }
+  //Checking the deviceID
   if (getRFValue == deviceID)
   {
     flag = true;
   }
+  //Checking
   if  (getRFValue == (deviceID + "1")) {
     turnOn();
     deviceStatus = "1";
@@ -108,22 +108,21 @@ void loop()
     deviceStatus = "0";
     //Serial.print("Light is OFF!");
   }
-  //Serial.print(getRFValue[5]);
-  //Serial.println();
-  String elect = checkElect();
-  String light = checkLight();
-  String finalValue = deviceID +  ";" + deviceStatus + ";" + isElectricSensorID + ":" + elect
+  //Read value from sensor
+  String electValue = checkElectStatus();
+  String light = checkLightStatus();
+  
+  String finalValue = deviceID +  ";" + deviceStatus + ";" + isElectricSensorID + ":" + electValue
                       + ";" + lightSensorID + ":" + light;
-  //Serial.println(elect);Serial.println(light);
-  //Serial.println(finalValue);
-  //chuyen doi String sang char*
+  //Serial.println(finalValue); //Debugging only
+  //Change String to char*
   finalValue.toCharArray(sendValue, 50);
-  const char *msg = sendValue ;
+  //If the deviceID is True sending the parameter value of device through RF
   if (flag == true) {
     vw_send((uint8_t *)msg, strlen(msg));
     vw_wait_tx();
     delay(200);
-    //Serial.print(" Sent!");
+    //Serial.print(" Sent!"); //Debugging only
     //Serial.println();
   }
   flag = false;
