@@ -6,10 +6,10 @@ PZEM004T pzem(&Serial); // RX,TX
 IPAddress ip(192, 168, 1, 1);
 
 //Initialise Device ID
-String deviceID = "pmez5";
-String voltageSensorID = "apmt3";
-String currentSensorID = "velk5";
-String powerSensorID = "rwep9";
+String device_ID = "pmez5";
+String voltageSensor_ID = "apmt3";
+String currentSensor_ID = "velk5";
+String powerSensor_ID = "rwep9";
 
 //Define RF transmit and receive pin on arduino
 const int transmit_pin = 10;
@@ -83,7 +83,7 @@ void loop() {
   }
   //Checking the deviceID
   //Serial.print(getRFValue);
-  if (getRFValue == deviceID)
+  if (getRFValue == device_ID)
   {
     flag = true;
   }
@@ -92,8 +92,8 @@ void loop() {
   String voltageValue = votageSensor();
   String currentValue = currentSensor();
   String powerValue = powerSensor();
-  String finalValue = deviceID +  ";" + deviceStatus + ";" + voltageSensorID + ":" + voltageValue
-                      + ";" + currentSensorID + ":" + currentValue + ";" + powerSensorID
+  String finalValue = device_ID +  ";" + deviceStatus + ";" + voltageSensor_ID + ":" + voltageValue
+                      + ";" + currentSensor_ID + ":" + currentValue + ";" + powerSensor_ID
                       + ":" + powerValue;
 
   //Serial.println(finalValue);

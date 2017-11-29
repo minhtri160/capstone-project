@@ -1,12 +1,11 @@
 #include <VirtualWire.h>
 
 //Initialise Device ID
-String deviceID = "hmna7";
-String humanSensorID = "zxpu2";
-String deviceStatus = "0";
+String device_ID = "hmna7";
+String humanSensor_ID = "zxpu2";
 
 //Define sensor input pin on arduino
-#define humanSensor 5
+#define humanSensor_pin 5
 
 //Define RF transmit and receive pin on arduino
 const int transmit_pin = 10;
@@ -29,11 +28,11 @@ void setup() {
   vw_rx_start();       // Start the receiver PLL running
 
   //Set Input and Output for sensor
-  pinMode(humanSensor, INPUT);
+  pinMode(humanSensor_pin, INPUT);
 }
 //Deteck Human in the area
 String checkHumanMovement() {
-  String value = String(digitalRead(humanSensor));
+  String value = String(digitalRead(humanSensor_pin));
   return value;
 }
 
@@ -58,20 +57,20 @@ void loop() {
       getRFValue += String(c);
     }
     //Serial.println(getRFValue);
-    if (getRFValue == deviceID)
+    if (getRFValue == device_ID)
     {
       flag = true;
     }
-    if  (getRFValue == (deviceID + "1")) {
+    if  (getRFValue == (device_ID + "1")) {
       deviceStatus = "1";
     }
-    if (getRFValue == (deviceID + "0")) {
+    if (getRFValue == (device_ID + "0")) {
       deviceStatus = "0";
     }
   }
   //Read value from sensor
   String value = checkHumanMovement();
-  String finalValue = deviceID + ";" + deviceStatus + ";" + humanSensorID + ":" + value;
+  String finalValue = device_ID + ";" + deviceStatus + ";" + humanSensor_ID + ":" + value;
   //Serial.println(finalValue);
   //If the deviceID is True sending the parameter value of device through RF
   finalValue.toCharArray(sendValue, 50);

@@ -1,16 +1,16 @@
 #include <VirtualWire.h>
 
 //Initialise Device ID
-String deviceID = "quat1";
-String temperatureSensorID = "t2v2c";
-String rotationSensorID = "e1b3n";
-String isElectricSensorID = "e1b4m";
+String device_ID = "quat1";
+String temperatureSensor_ID = "t2v2c";
+String rotationSensor_ID = "e1b3n";
+String isElectricSensor_ID = "e1b4m";
 
 //Define sensor input pin on arduino
-#define relayControl 6
-#define rotationSensor 3 //Rotation encoder sensor
-#define checkElectricSensor 7
-#define temperatureSensor A1 //Temperature LM35 sensor
+#define relayControl_pin 6
+#define rotationSensor_pin 3 //Rotation encoder sensor
+#define checkElectricSensor_pin 7
+#define temperatureSensor_pin A1 //Temperature LM35 sensor
 
 //Define RF transmit and receive pin on arduino
 const int transmit_pin = 10;
@@ -33,7 +33,7 @@ void setup()
   Serial.println("Setup");
   pulses = 0;
   timeOld = 0;
-  attachInterrupt(digitalPinToInterrupt(rotationSensor), counter, FALLING);
+  attachInterrupt(digitalPinToInterrupt(rotationSensor_pin), counter, FALLING);
 
   // Initialise the IO and ISR
   vw_set_tx_pin(transmit_pin);
@@ -44,10 +44,10 @@ void setup()
   vw_rx_start();        // Start the receiver PLL running
 
   //Set Input and Output for sensor
-  pinMode(rotationSensor, INPUT);
-  pinMode(relayControl, OUTPUT);
-  pinMode(checkElectricSensor, INPUT);
-  pinMode(temperatureSensor, INPUT);
+  pinMode(rotationSensor_pin, INPUT);
+  pinMode(relayControl_pin, OUTPUT);
+  pinMode(checkElectricSensor_pin, INPUT);
+  pinMode(temperatureSensor_pin, INPUT);
 }
 
 void counter()
@@ -56,7 +56,7 @@ void counter()
 }
 //Reading temperature from fan
 float teperatureReading() {
-  float temp = analogRead(temperatureSensor);
+  float temp = analogRead(temperatureSensor_pin);
   float voltageRef = temp * 5.0 / 1024.0;
 
   // ở trên mình đã giới thiệu, cứ mỗi 10mV = 1 độ C.
@@ -70,27 +70,27 @@ float teperatureReading() {
 float rotationReading() {
   if (millis() - timeOld >= 1000)
   {
-    detachInterrupt(digitalPinToInterrupt(rotationSensor));
+    detachInterrupt(digitalPinToInterrupt(rotationSensor_pin));
     rpm = (pulses * 60) / (HOLES_DISC);
     timeOld = millis();
     pulses = 0;
-    attachInterrupt(digitalPinToInterrupt(rotationSensor), counter, FALLING);
+    attachInterrupt(digitalPinToInterrupt(rotationSensor_pin), counter, FALLING);
   }
   return rpm;
 }
 int checkElectStatus() {
-  int value = digitalRead(checkElectricSensor);
+  int value = digitalRead(checkElectricSensor_pin);
   return value;
 }
 
 //Turn on Device
 void turnOn() {
-  digitalWrite(relayControl, HIGH);
+  digitalWrite(rotationSensor_pin, HIGH);
 }
 
 //Turn off Device
 void turnOff() {
-  digitalWrite(relayControl, LOW);
+  digitalWrite(rotationSensor_pin, LOW);
 }
 
 //Main program
@@ -116,17 +116,17 @@ void loop()
     }
   }
   //Checking the deviceID
-  if (getRFValue == deviceID)
+  if (getRFValue == device_ID)
   {
     flag = true;
   }
   
-  if  (getRFValue == (deviceID + "1")) {
+  if  (getRFValue == (device_ID + "1")) {
     turnOn();
     deviceStatus = "1";
     //Serial.print("Fan is ON!");
   }
-  if (getRFValue == (deviceID + "0")) {
+  if (getRFValue == (device_ID + "0")) {
     turnOff();
     deviceStatus = "0";
     //Serial.print("Fan is OFF!");
@@ -135,8 +135,8 @@ void loop()
   String rotationValue = String(rotationReading());
   String temperatureValue = String(teperatureReading());
   String electValue = String(checkElectStatus());
-  String finalValue = deviceID +  ";" + deviceStatus + ";" + rotationSensorID + ":" + rotationValue
-                      + ";" + temperatureSensorID + ":" + temperatureValue + ";" + isElectricSensorID + ":" + electValue;
+  String finalValue = device_ID +  ";" + deviceStatus + ";" + rotationSensor_ID + ":" + rotationValue
+                      + ";" + temperatureSensor_ID + ":" + temperatureValue + ";" + isElectricSensor_ID + ":" + electValue;
   //Serial.println(finalValue);//Debugging only
   //chuyen doi String sang char*
   finalValue.toCharArray(sendValue, 50);
