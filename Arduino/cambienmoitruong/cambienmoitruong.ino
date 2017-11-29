@@ -13,10 +13,10 @@ String temperatureSensorID = "ppet9";
 String humiditySensorID = "msyu4";
 
 //Dat ten hoac so cho cac cam bien gan vao arduino
-String sensorId = "";
+String deviceStatus = "1";
 
 //Thong bao cac cong cho sensor tren arduino
-#define DHTPIN 9 //sensor nhietdo doam.
+#define DHTPIN 5 //sensor nhietdo doam.
 #define DHTTYPE DHT22
 #define gasSensor A1//mq2
 #define fireSensor 7
@@ -96,7 +96,7 @@ void loop()
 {
   byte buf[VW_MAX_MESSAGE_LEN];
   byte buflen = VW_MAX_MESSAGE_LEN;
-  String b;
+  String getRFValue;
   boolean flag = false;
 
   if (vw_get_message(buf, &buflen)) // Non-blocking
@@ -106,17 +106,22 @@ void loop()
     for (i = 0; i < buflen; i++)
     {
       char c = buf[i];
-      String a = String(c);
-      b += a;
+      getRFValue += String(c);
     }
-    Serial.print(b);
-    if (b == deviceID)
+    Serial.print(getRFValue);
+    if (getRFValue == deviceID)
     {
       flag = true;
     }
   }
+    if  (getRFValue == (deviceID + "1")) {
+    deviceStatus = "1";
+  }
+  if (getRFValue == (deviceID + "0")) {
+    deviceStatus = "0";
+  }
 
-  String status1 = "0";
+
   //Chep gia tri do duoc cua sensor vao trong cac bien String de chuan bi gui di
   String temperatureValue = String(temperatureCalculation());
   String humidityValue = String(humidityCalculation());
@@ -124,7 +129,7 @@ void loop()
   String smokeValue = smokeSensorCalculation();
   String fireValue = fireSensorCalculation();
   String leakWaterValue = waterLeakSensorCalculation();
-  String finalValue = deviceID +  ";" + status1 + ";" + temperatureSensorID + ":" + temperatureValue + ";"
+  String finalValue = deviceID +  ";" + deviceStatus + ";" + temperatureSensorID + ":" + temperatureValue + ";"
                       + humiditySensorID + ":" + humidityValue + ";" + gasSensorID + ":" + gasValue + ";"
                       + smokeSensorID + ":" + smokeValue + ";" + fireSensorID + ":" + fireValue + ";"
                       + leakSensorID + ":" + leakWaterValue;

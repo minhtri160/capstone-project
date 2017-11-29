@@ -22,7 +22,7 @@ const int transmit_en_pin = 3;
 void setup()
 {
   Serial.begin(9600);    // Debugging only
-  Serial.println("Setup");
+  //Serial.println("Setup");--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
   // Initialise the IO and ISR
   vw_set_tx_pin(transmit_pin);
@@ -77,19 +77,22 @@ void loop()
   byte buflen = VW_MAX_MESSAGE_LEN;
   String getRFValue;
   boolean flag = false;
-  
+
 
   if (vw_get_message(buf, &buflen)) // Non-blocking
   {
     int i;
-    Serial.print("Got: ");
+    //Serial.print("Got: ");
     for (i = 0; i < buflen; i++)
     {
       char c = buf[i];
       getRFValue += String(c);
     }
-    Serial.print(getRFValue);
-    Serial.println();
+
+   
+    
+    //Serial.print(getRFValue);
+    //Serial.println();
   }
   if (getRFValue == deviceID)
   {
@@ -98,12 +101,12 @@ void loop()
   if  (getRFValue == (deviceID + "1")) {
     turnOn();
     deviceStatus = "1";
-    Serial.print("Light is ON!");
+    //Serial.print("Light is ON!");
   }
   if (getRFValue == (deviceID + "0")) {
     turnOff();
     deviceStatus = "0";
-    Serial.print("Light is OFF!");
+    //Serial.print("Light is OFF!");
   }
   //Serial.print(getRFValue[5]);
   //Serial.println();
@@ -112,7 +115,7 @@ void loop()
   String finalValue = deviceID +  ";" + deviceStatus + ";" + isElectricSensorID + ":" + elect
                       + ";" + lightSensorID + ":" + light;
   //Serial.println(elect);Serial.println(light);
-  Serial.println(finalValue);
+  //Serial.println(finalValue);
   //chuyen doi String sang char*
   finalValue.toCharArray(sendValue, 50);
   const char *msg = sendValue ;
@@ -120,8 +123,8 @@ void loop()
     vw_send((uint8_t *)msg, strlen(msg));
     vw_wait_tx();
     delay(200);
-    Serial.print(" Sent!");
-    Serial.println();
+    //Serial.print(" Sent!");
+    //Serial.println();
   }
   flag = false;
 }

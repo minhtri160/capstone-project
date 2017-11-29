@@ -2,6 +2,7 @@
 
 String deviceID = "hmna7";
 String humanSensorID = "zxpu2";
+String deviceStatus = "0";
 
 //Define sensor input pin on arduino
 #define humanSensor 5
@@ -32,11 +33,11 @@ String checkHumanMovement() {
 }
 
 void loop() {
-  String deviceStatus ="1";
+
   String value = checkHumanMovement();
   String finalValue = deviceID + ";" + deviceStatus + ";" + humanSensorID + ":" + value;
   //Serial.println(finalValue);
-  
+
   byte buf[VW_MAX_MESSAGE_LEN];
   byte buflen = VW_MAX_MESSAGE_LEN;
   String getRFValue;
@@ -58,6 +59,13 @@ void loop() {
     {
       flag = true;
     }
+    if  (getRFValue == (deviceID + "1")) {
+      deviceStatus = "1";
+    }
+    if (getRFValue == (deviceID + "0")) {
+      deviceStatus = "0";
+    }
+
   }
   if (flag == true) {
     for (int i = 0; i < 1; i++) {
