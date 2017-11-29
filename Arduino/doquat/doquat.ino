@@ -76,7 +76,7 @@ float dovong() {
     timeOld = millis();
     pulses = 0;
     attachInterrupt(digitalPinToInterrupt(rotationSensor), counter, FALLING);
-    int reading = analogRead(rotationSensor);
+    //int reading = analogRead(rotationSensor);
   }
   return rpm;
 }
