@@ -7,13 +7,11 @@ String rotationSensorID = "e1b3n";
 String electricSensorID = "e1b4m";
 
 //Define sensor input pin on arduino
-
 #define relayControl 6
 #define rotationSensor 3// vong quay
 #define checkElectricSensor 7
 #define temperatureSensor A1 //nhiet do
 
-//Thong bao cac cong nhan cua cac thiet bi tren arduino
 const int transmit_pin = 10;
 const int receive_pin = 2;
 const int transmit_en_pin = 4;
@@ -26,7 +24,6 @@ float rpm;
 unsigned long timeOld;
 volatile unsigned int pulses;
 String deviceStatus = "0";
-
 void setup()
 {
   Serial.begin(9600);    // Debugging only
@@ -78,7 +75,8 @@ float dovong() {
     timeOld = millis();
     pulses = 0;
     attachInterrupt(digitalPinToInterrupt(rotationSensor), counter, FALLING);
-    //int reading = analogRead(rotationSensor);
+    
+//Thong bao cac cong nhan cua cac thiet bi tren arduinoint reading = analogRead(rotationSensor);
   }
   return rpm;
 }
@@ -103,7 +101,7 @@ void loop()
   byte buflen = VW_MAX_MESSAGE_LEN;
   String getRFValue;
   boolean flag = false;
-
+ 
 
   if (vw_get_message(buf, &buflen)) // Non-blocking
   {
