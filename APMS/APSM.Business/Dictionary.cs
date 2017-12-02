@@ -29,9 +29,8 @@ namespace APMS.Business.Dictionary
     public enum DeviceState : int
     {
         Off = 0,
-        Startup = 1,
-        On = 2,
-        ShuttingDown = 3
+        On = 1,
+        Offline = -1
     }
 
     public enum SensorType : int
@@ -42,7 +41,13 @@ namespace APMS.Business.Dictionary
         Humidity = 3,
         Smoke = 4,
         Fire = 5,
-        Motion = 6
+        Motion = 6,
+        Spin = 7,
+        Electric = 8,
+        Light = 9,
+        Power = 10,
+        Gas = 11,
+        WaterLeak = 12
     }
 
     public enum WarningState : int
@@ -61,7 +66,8 @@ namespace APMS.Business.Dictionary
         LowTemp = 11,
         TooDry = 12,
         HasMotion = 13,
-        Others = 14
+        Others = 14,
+        PreWarning = 15
     }
 
     public enum DeviceType : int
@@ -70,6 +76,16 @@ namespace APMS.Business.Dictionary
         LighBulb = 1,
         Environment = 2,
         Fire = 3,
-        Security = 4
+        Security = 4,
+        Energy = 5
     }
+
+    public enum Time : int
+    {
+        DelayTime = 2,
+        TokenExpireTime = 5,
+        CheckDeviceTime = 60
+    }
+
+    
 }

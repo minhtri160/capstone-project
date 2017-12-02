@@ -10,27 +10,28 @@ namespace APMS.Business.Web
     {
         public HomeViewModel()
         {
-            DeviceList = new List<Device>();
+            DeviceList = new List<DeviceViewModel>();
         }
-        public List<Device> DeviceList { get; set; }
+        public List<DeviceViewModel> DeviceList { get; set; }
+        public int NewNotificationAmount { get; set; }
     }
 
-    public class Device
+    public class DeviceViewModel
     {
-        public Device()
+        public DeviceViewModel()
         {
-            SensorList = new List<Sensor>();
+            SensorList = new List<SensorViewModel>();
         }
-        public Device(DataAccess.Device device)
+        public DeviceViewModel(DataAccess.Device device)
         {
-            SensorList = new List<Sensor>();
+            SensorList = new List<SensorViewModel>();
             DeviceId = device.DeviceId;
             DeviceName = device.DeviceName;
             DeviceType = device.DeviceType;
             State = (int)device.State;
             Position = device.Position;
         }
-        public List<Sensor> SensorList { get; set; }
+        public List<SensorViewModel> SensorList { get; set; }
         public string DeviceId { get; set; }
         public string DeviceName { get; set; }
         public int DeviceType { get; set; }
@@ -38,14 +39,14 @@ namespace APMS.Business.Web
         public string Position { get; set; }
     }
 
-    public class Sensor
+    public class SensorViewModel
     {
-        public Sensor()
+        public SensorViewModel()
         {
 
         }
 
-        public Sensor(DataAccess.Sensor sensor, string sensorName)
+        public SensorViewModel(DataAccess.Sensor sensor, string sensorName)
         {
             SensorId = sensor.SensorId;
             SensorName = sensorName;

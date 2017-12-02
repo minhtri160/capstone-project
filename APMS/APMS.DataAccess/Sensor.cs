@@ -24,9 +24,10 @@ namespace APMS.DataAccess
         public string SensorId { get; set; }
         public string SensorCode { get; set; }
         public string DeviceId { get; set; }
-        public Nullable<double> Value { get; set; }
+        public double Value { get; set; }
         public string Unit { get; set; }
-        public Nullable<int> WarningState { get; set; }
+        public int WarningState { get; set; }
+        public Nullable<System.DateTime> ActiveTime { get; set; }
     
         public virtual Device Device { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

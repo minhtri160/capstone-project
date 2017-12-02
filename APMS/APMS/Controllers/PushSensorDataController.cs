@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using APMS.Business.API;
+using APMS.Business.Web;
 using APMS.DataAccess;
 
 namespace APMS.Controllers
@@ -13,7 +13,7 @@ namespace APMS.Controllers
     {
         public HttpStatusCode POST(SaveSensorDataAPIViewModel model)
         {
-            ISaveSensorDataAPI pushSensorData = new SaveSensorDataAPI();
+            ISensorBusiness pushSensorData = new SensorBusiness();
             //var header = this.Request.Headers;
             //Account acc = new Account();
             //if (header.Contains("token"))

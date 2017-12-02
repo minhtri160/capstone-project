@@ -12,13 +12,12 @@ namespace APMS.DataAccess
     using System;
     using System.Collections.Generic;
     
-    public partial class Rule
+    public partial class sysdiagram
     {
-        public string SensorId { get; set; }
-        public int State { get; set; }
-        public int OperatorType { get; set; }
-        public double Value { get; set; }
-    
-        public virtual Sensor Sensor { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }

@@ -28,6 +28,8 @@ namespace APMS.DataAccess
         public string LastName { get; set; }
         public int AccountType { get; set; }
         public string Channel { get; set; }
+        public string Phone { get; set; }
+        public Nullable<System.DateTime> TokenExpiration { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Device> Devices { get; set; }

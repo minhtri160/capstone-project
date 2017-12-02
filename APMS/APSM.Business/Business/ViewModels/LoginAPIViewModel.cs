@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using APMS.Business.Web;
 
 namespace APMS.Business.API
 {
-    public class LoginAPIViewModel
+    public class LoginAPIViewModel : LoginViewModel
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
     }
 
     public class ResponseLoginAPIViewModel
     {
         public ResponseLoginAPIViewModel()
         {
-            DeviceList = new List<Device>();
+            DeviceIdList = new List<string>();
         }
         public string Channel { get; set; }
-        public List<Device> DeviceList { get; set; }
+        public List<string> DeviceIdList { get; set; }
+        public string Token { get; set; }
     }
 }

@@ -18,6 +18,12 @@ namespace APMS.Web
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "Login",
+                url: "Account/Login/{token}",
+                defaults: new { controller = "Account", action = "Login", token = UrlParameter.Optional }
+            );
         }
     }
 }

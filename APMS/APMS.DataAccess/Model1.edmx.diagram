@@ -18,6 +18,7 @@
         <AssociationConnector Association="APMSModel.FK_Record_Sensor" />
         <AssociationConnector Association="APMSModel.FK_Rule_Sensor" />
         <AssociationConnector Association="APMSModel.FK_Sensor_SensorType" />
+        <EntityTypeShape EntityType="APMSModel.sysdiagram" Width="1.5" PointX="5.375" PointY="6.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

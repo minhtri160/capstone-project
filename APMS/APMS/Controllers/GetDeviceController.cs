@@ -21,7 +21,7 @@ namespace APMS.Controllers
                 string token = header.GetValues("token").First();
                 acc = AuthorizeToken.Authorize(token);
             }
-            GetDeviceAPIViewModel model = getDeviceAPI.Get(acc.AccountId);
+            //GetDeviceAPIViewModel model = getDeviceAPI.Get(acc.AccountId);
             return null;
         }
     }

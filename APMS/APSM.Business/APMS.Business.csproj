@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,23 +41,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Business\AuthorizeToken\AuthorizeToken.cs" />
-    <Compile Include="Business\GetDevicesAPI\GetDeviceAPIViewModel.cs" />
-    <Compile Include="Business\GetDevicesAPI\GetDeviceAPI.cs" />
-    <Compile Include="Business\GetDevicesAPI\IGetDeviceAPI.cs" />
-    <Compile Include="Business\HomeWeb\HomeViewModel.cs" />
-    <Compile Include="Business\HomeWeb\HomeWeb.cs" />
-    <Compile Include="Business\HomeWeb\IHomeWeb.cs" />
-    <Compile Include="Business\LoginAPI\ILoginAPI.cs" />
-    <Compile Include="Business\LoginAPI\LoginAPI.cs" />
-    <Compile Include="Business\LoginAPI\LoginAPIViewModel.cs" />
-    <Compile Include="Business\LoginWeb\ILoginWeb.cs" />
-    <Compile Include="Business\LoginWeb\LoginWeb.cs" />
-    <Compile Include="Business\LoginWeb\LoginWebViewModel.cs" />
-    <Compile Include="Business\Notification\Notification.cs" />
-    <Compile Include="Business\SaveSensorDataAPI\ISaveSensorDataAPI.cs" />
-    <Compile Include="Business\SaveSensorDataAPI\SaveSensorDataAPI.cs" />
-    <Compile Include="Business\SaveSensorDataAPI\SaveSensorDataAPIViewModel.cs" />
+    <Compile Include="Business\ViewModels\HomeViewModel.cs" />
+    <Compile Include="Business\DeviceBusiness\DeviceBusiness.cs" />
+    <Compile Include="Business\DeviceBusiness\IDeviceBusiness.cs" />
+    <Compile Include="Business\ViewModels\LoginAPIViewModel.cs" />
+    <Compile Include="Business\AccountBusiness\IAccountBusiness.cs" />
+    <Compile Include="Business\AccountBusiness\AccountBusiness.cs" />
+    <Compile Include="Business\ViewModels\LoginWebViewModel.cs" />
+    <Compile Include="Business\ViewModels\NotificationViewModel.cs" />
+    <Compile Include="Business\NotificationBusiness\INotificationBusiness.cs" />
+    <Compile Include="Business\NotificationBusiness\NotificationBusiness.cs" />
+    <Compile Include="Business\SensorBusiness\ISensorBusiness.cs" />
+    <Compile Include="Business\SensorBusiness\SensorBusiness.cs" />
+    <Compile Include="Business\ViewModels\SensorsDataViewModel.cs" />
     <Compile Include="Dictionary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

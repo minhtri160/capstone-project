@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 
 namespace APMS.Business.Web
 {
-    public class LoginWebViewModel
+
+    public class LoginViewModel
     {
         public string Username { get; set; }
         public string Password { get; set; }
+    }
+
+    public class LoginWebViewModel : LoginViewModel
+    {
         public string ErrMessage { get; set; }
     }
 }

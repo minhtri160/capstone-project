@@ -4,27 +4,27 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using APMS.Models;
 using APMS.Business.API;
+using APMS.Business.Web;
 
-namespace APMS.Controllers
+namespace APMS.Web.Controllers
 {
     public class LoginController : ApiController
     {
         public HttpResponseMessage POST(LoginAPIViewModel model)
         {
-            ILoginAPI loginBusiness = new LoginAPI();
-            
+            IAccountBusiness accountBusiness = new AccountBusiness();
+
             ResponseLoginAPIViewModel response = new ResponseLoginAPIViewModel();
             if (model != null)
             {
-                APMS.DataAccess.Account acc = loginBusiness.Login(model);
+                APMS.DataAccess.Account acc = accountBusiness.CheckUserAPI(model);
 
                 if (acc != null)
                 {
-                    IGetDeviceAPI getDevice = new GetDeviceAPI();
+                    IDeviceBusiness deviceBusiness = new DeviceBusiness();
                     response.Channel = acc.Channel;
-                    response.DeviceIdList = getDevice.GetDeviceIdListByAccountId(acc.AccountId);
+                    response.DeviceIdList = deviceBusiness.GetDeviceIdListByAccountId(acc.AccountId);
                     response.Token = acc.Token;
                     return Request.CreateResponse(HttpStatusCode.OK, response);
                 }

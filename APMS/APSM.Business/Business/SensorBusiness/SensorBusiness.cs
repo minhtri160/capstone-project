@@ -1,18 +1,23 @@
 ﻿
 using System;
-using APMS.DataAccess;
 using System.Linq;
 using System.Collections.Generic;
+using APMS.DataAccess;
 using APMS.Business.Dictionary;
 
-namespace APMS.Business.API
+namespace APMS.Business.Web
 {
-    public class SaveSensorDataAPI : ISaveSensorDataAPI
+    public class SensorBusiness : ISensorBusiness
     {
+        private IRepository<DataAccess.SensorType> sensorTypeReposiotory = new Repository<DataAccess.SensorType>();
+        private IRepository<Sensor> sensorReposiotory = new Repository<Sensor>();
+        private IRepository<Device> deviceReposiotory = new Repository<Device>();
+        private IRepository<Record> recordReposiotory = new Repository<Record>();
+        private IRepository<Rule> ruleReposiotory = new Repository<Rule>();
+        private IRepository<Rule> ruleRepository = new Repository<Rule>();
 
         private int GetSensorTypeBySensorCode(string sensorCode)
         {
-            IRepository<APMS.DataAccess.SensorType> sensorTypeReposiotory = new Repository<APMS.DataAccess.SensorType>();
             var currentSensorType = sensorTypeReposiotory.GetAll().Where(x => x.SensorCode.Equals(sensorCode.Trim())).FirstOrDefault();
             if (currentSensorType != null)
             {
@@ -20,20 +25,17 @@ namespace APMS.Business.API
             }
             return -1;
         }
-        public int GetWarningStateByValue(APMS.DataAccess.Record rec)
+        private int? GetWarningStateByValue(Record rec, int deviceState)
         {
-            IRepository<APMS.DataAccess.Sensor> sensorReposiotory = new Repository<APMS.DataAccess.Sensor>();
-            IRepository<APMS.DataAccess.Rule> ruleRepository = new Repository<APMS.DataAccess.Rule>();
-
-            APMS.DataAccess.Sensor currentSensor = sensorReposiotory.GetAll().Where(x => x.SensorId.Equals(rec.SensorId)).FirstOrDefault();
-            List<APMS.DataAccess.Rule> ruleList = ruleRepository.GetAll().Where(x => x.SensorId.Equals(rec.SensorId)).ToList();
+            Sensor currentSensor = sensorReposiotory.GetAll().Where(x => x.SensorId.Equals(rec.SensorId)).FirstOrDefault();
+            List<Rule> ruleList = ruleRepository.GetAll().Where(x => x.SensorId.Equals(rec.SensorId) && x.State == deviceState).ToList();
 
             int currentSensorType = GetSensorTypeBySensorCode(currentSensor.SensorCode);
             int warningState = 0;
 
 
             if (currentSensor == null)
-                return -1;
+                return null;
 
             foreach (var rule in ruleList)
             {
@@ -120,22 +122,29 @@ namespace APMS.Business.API
                     }
                 }
             }
+            if (currentSensor.WarningState == 0 && warningState != 0)
+            {
+                warningState = (int)WarningState.PreWarning;
+            }
+            else if (currentSensor.WarningState == (int)WarningState.PreWarning && currentSensor.ActiveTime != null)
+            {
 
+                TimeSpan timeSpan = DateTime.Now.Subtract((DateTime)currentSensor.ActiveTime);
+                if (timeSpan.TotalSeconds <= (int)Dictionary.Time.DelayTime)
+                {
+                    return null;
+                }
+            }
             return warningState;
-            
-        }
 
-        public SaveSensorDataAPIViewModel SaveData(SaveSensorDataAPIViewModel model)
+        }
+        public SensorsDataViewModel SaveData(SensorsDataViewModel model)
         {
             DateTime Now = DateTime.Now;
+            INotificationBusiness notification = new NotificationBusiness();
 
-            IRepository<APMS.DataAccess.Device> deviceReposiotory = new Repository<APMS.DataAccess.Device>();
-            IRepository<APMS.DataAccess.Sensor> sensorReposiotory = new Repository<APMS.DataAccess.Sensor>();
-            IRepository<APMS.DataAccess.Record> recordReposiotory = new Repository<APMS.DataAccess.Record>();
-            IRepository<APMS.DataAccess.Rule> ruleReposiotory = new Repository<APMS.DataAccess.Rule>();
-
-            APMS.DataAccess.Device currentDevice = deviceReposiotory.GetAll().Where(x => x.DeviceId.Equals(model.DeviceId.Trim())).FirstOrDefault();
-            List<APMS.DataAccess.Sensor> sensorList = sensorReposiotory.GetAll().ToList();
+            Device currentDevice = deviceReposiotory.GetAll().Where(x => x.DeviceId.Equals(model.DeviceId.Trim())).FirstOrDefault();
+            List<Sensor> sensorList = sensorReposiotory.GetAll().ToList();
             if (currentDevice == null)
                 return null;
             else
@@ -145,9 +154,9 @@ namespace APMS.Business.API
                 deviceReposiotory.Update(currentDevice);
             }
 
-            for (int i=0; i<model.SensorParamList.Count;i++) 
+            for (int i = 0; i < model.SensorList.Count; i++)
             {
-                var item = model.SensorParamList[i];
+                var item = model.SensorList[i];
                 var currentSensor = sensorList.Find(x => x.SensorId.Equals(item.SensorId.Trim()));
                 if (currentSensor != null)
                 {
@@ -157,20 +166,23 @@ namespace APMS.Business.API
                     record.Time = Now;
                     record.State = model.State;
                     recordReposiotory.Insert(record);
-                    int warningState = GetWarningStateByValue(record);
-                    model.SensorParamList[i].WarningState = warningState;
+                    int? warningState = GetWarningStateByValue(record, (int)currentDevice.State);
+                    model.SensorList[i].WarningState = warningState;
 
-
-                    if (warningState != currentSensor.WarningState)
+                    if (warningState != null)
                     {
-                        currentSensor.WarningState = warningState;
-                        if (warningState!=0)
+                        if (warningState != currentSensor.WarningState)
                         {
-                            Business.Web.Notification.SendWarningSensorStateNotification(currentSensor);
+                            currentSensor.WarningState = (int)warningState;
+                            if (warningState != (int)WarningState.Normal && warningState != (int)WarningState.PreWarning)
+                            {
+                                notification.SendWarningSensorStateNotification(currentSensor);
+                            }
                         }
+                        currentSensor.Value = (double)item.Value;
+                        currentSensor.ActiveTime = DateTime.Now;
+                        sensorReposiotory.Update(currentSensor);
                     }
-                    currentSensor.Value = item.Value;
-                    sensorReposiotory.Update(currentSensor);
                 }
             }
 

@@ -91,7 +91,7 @@ void loop()
 
   String finalValue = deviceID +  "; " + deviceStatus + "; " + checkLight();
 
-  //Serial.println(finalValue);
+  Serial.println(finalValue);
   //chuyen doi String sang char*
   finalValue.toCharArray(sendValue, 50);
   const char *msg = sendValue ;
