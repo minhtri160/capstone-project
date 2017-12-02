@@ -2,15 +2,24 @@
 #include <PZEM004T.h>
 #include <VirtualWire.h>
 
-PZEM004T pzem(&Serial1); // RX,TX
+PZEM004T pzem(&Serial); // RX,TX
 IPAddress ip(192, 168, 1, 1);
 
-String deviceID = "aadf9";
+//Initialise Device ID
+String device_ID = "pmez5";
+String voltageSensor_ID = "apmt3";
+String currentSensor_ID = "velk5";
+String powerSensor_ID = "rwep9";
 
-//Thong bao cac cong nhan cua cac thiet bi tren arduino
-const int transmit_pin = 4;
+//Define RF transmit and receive pin on arduino
+const int transmit_pin = 10;
 const int receive_pin = 2;
+const int transmit_en_pin = 3;
 
+//Initialise Global variable
+String  deviceStatus = "0";
+
+//Startup setup for program
 void setup() {
   Serial.begin(9600);
   pzem.setAddress(ip);
@@ -18,29 +27,50 @@ void setup() {
   // Initialise the IO and ISR
   vw_set_tx_pin(transmit_pin);
   vw_set_rx_pin(receive_pin);
+  vw_set_ptt_pin(transmit_en_pin);
   vw_set_ptt_inverted(true); // Required for DR3100
   vw_setup(2000);  // Bits per sec
   vw_rx_start();
 }
-String dodong() {
-  float v = pzem.voltage(ip);
-  if (v < 0.0) v = 0.0;
-  String voltageValue = String(v);
 
+//Reading voltage from load
+String votageSensor() {
+  float v = pzem.voltage(ip);
+  if (v < 0.0) {
+    v = 0.0;
+    deviceStatus = "1";
+  } else {
+    deviceStatus = "0";
+  }
+  String voltageValue = String(v);
+  return voltageValue;
+}
+
+//Reading current from load
+String currentSensor() {
   float i = pzem.current(ip);
   if (i < 0.0) i = 0.0;
   String currentValue = String(i);
-
-  String value = "Ap:" + voltageValue + "V;Dong:" + currentValue + "A";
-  return value;
+  return currentValue;
 }
 
+//Reading power comsumption from load
+String powerSensor() {
+  float p = pzem.power(ip);
+  String powerValue = String(p);
+}
+
+//Main program
 void loop() {
+  //Initialise variable
   byte buf[VW_MAX_MESSAGE_LEN];
   byte buflen = VW_MAX_MESSAGE_LEN;
-  String b;
+  String getRFValue;
   boolean flag = false;
+  char sendValue[100];
+  const char *msg = sendValue;
 
+  //Checking if there is any RF message sent
   if (vw_get_message(buf, &buflen)) // Non-blocking
   {
     int i;
@@ -48,31 +78,35 @@ void loop() {
     for (i = 0; i < buflen; i++)
     {
       char c = buf[i];
-      String a = String(c);
-      b += a;
-    }
-    Serial.print(b);
-    if (b == deviceID)
-    {
-      flag = true;
+      getRFValue += String(c);
     }
   }
+  //Checking the deviceID
+  //Serial.print(getRFValue);
+  if (getRFValue == device_ID)
+  {
+    flag = true;
+  }
 
-  String status1 = "0";
-  //Chep gia tri do duoc cua sensor vao trong cac bien String de chuan bi gui di
-  String giatrido = dodong();
-  String finalValue = deviceID +  ";" + status1 + ";" + giatrido;
-  Serial.println(finalValue);
-  char sendValue[50];
-  //chuyen doi String sang char*
-  finalValue.toCharArray(sendValue, 50);
-  const char *msg = sendValue ;
+  //Read value from sensor
+  String voltageValue = votageSensor();
+  String currentValue = currentSensor();
+  String powerValue = powerSensor();
+  String finalValue = device_ID +  ";" + deviceStatus + ";" + voltageSensor_ID + ":" + voltageValue
+                      + ";" + currentSensor_ID + ":" + currentValue + ";" + powerSensor_ID
+                      + ":" + powerValue;
+
+  //Serial.println(finalValue);
+
+  //Change String to char*
+  finalValue.toCharArray(sendValue, 100);
+  //If the deviceID is True sending the parameter value of device through RF
   if (flag == true) {
     vw_send((uint8_t *)msg, strlen(msg));
     vw_wait_tx();
     delay(200);
-    Serial.print(" da nhan");
-    Serial.println();
+    //Serial.print(" da nhan");
+    //Serial.println();
   }
-
+  flag = false;
 }
