@@ -11,9 +11,21 @@ function SignalR() {
         if (state == 1) {
             stateString = "On"
         } else if (state == -1) {
-            stateString = "Not Respoding"
+            stateString = "Not Responding"
+        }
+        if (state == -1)
+        {
+            if ($('#' + deviceId).hasClass('small-box bg-green-active')) {
+                $('#' + deviceId).removeClass('small-box bg-green-active').addClass('small-box bg-red-active');
+            }
+        }
+        else {
+            if ($('#' + deviceId).hasClass('small-box bg-red-active')) {
+                $('#' + deviceId).removeClass('small-box bg-red-active').addClass('small-box bg-green-active');
+            }
         }
         $('#' + deviceId + 's').html(stateString);
+        $('#' + deviceId + 'n').val(state);
         var listSensor = sensorValue.split(";");
         for (var i = 0; i < listSensor.length; i++) {
             var item = listSensor[i];
@@ -34,16 +46,18 @@ function SignalR() {
         Notification.GetAllNotification();
     };
 
-    hub.client.remote = function (deviceId, state) {
-        var deviceId = '#' + deviceId + 's';
-        var status = $(deviceId).html();
-        if (status.trim() != "Not Responding") {
-            var deviceState = "Off";
-            if (state == 1)
-                deviceState = "On";
-            $(deviceId).html(deviceState);
-        }
-    }
+    //hub.client.remote = function (deviceId, state) {
+    //    var Id = '#' + deviceId + 'n';
+    //    var deviceId = '#' + deviceId + 's';
+    //    var status = $(Id).val();
+    //    if (status.trim() != "-1") {
+    //        var deviceState = "Off";
+    //        if (state == 1)
+    //            deviceState = "On";
+    //        $(deviceId).html(deviceState);
+    //        $(Id).val(state);
+    //    }
+    //}
 
     $.connection.hub.start().done(function () {
 
@@ -57,28 +71,49 @@ function SignalR() {
             hub.server.RemoteDevice(channel, id, state);
         }
         $('#httc8').click(function () {
-            var state = $('#httc8s').html()
-            var remoteState = 0;
-            if (state.trim() == "Off")
-                remoteState = 1;
-            hub.server.remoteDevice(channel, 'httc8', remoteState);
-
+            var state = $('#httc8n').val()
+            if (state.trim() != "-1") {
+                var remoteState = 0;
+                if (state.trim() == "0")
+                    remoteState = 1;
+                hub.server.remoteDevice(channel, 'httc8', remoteState);
+            }
         })
         $('#quat1').click(function () {
-            var state = $('#quat1s').html()
-            var remoteState = 0;
-            if (state.trim() == "Off")
-                remoteState = 1;
-            hub.server.remoteDevice(channel, 'quat1', remoteState);
-
+            var state = $('#quat1n').val()
+            if (state.trim() != "-1") {
+                var remoteState = 0;
+                if (state.trim() == "0")
+                    remoteState = 1;
+                hub.server.remoteDevice(channel, 'quat1', remoteState);
+            }
         })
         $('#hmna7').click(function () {
-            var state = $('#hmna7s').html()
-            var remoteState = 0;
-            if (state.trim() == "Off")
-                remoteState = 1;
-            hub.server.remoteDevice(channel, 'hmna7', remoteState);
-
+            var state = $('#hmna7n').val()
+            if (state.trim() != "-1") {
+                var remoteState = 0;
+                if (state.trim() == "0")
+                    remoteState = 1;
+                hub.server.remoteDevice(channel, 'hmna7', remoteState);
+            }
+        })
+        $('#mtia8').click(function () {
+            var state = $('#mtia8n').val()
+            if (state.trim() != "-1") {
+                var remoteState = 0;
+                if (state.trim() == "0")
+                    remoteState = 1;
+                hub.server.remoteDevice(channel, 'mtia8', remoteState);
+            }
+        })
+        $('#pmez5').click(function () {
+            var state = $('#pmez5n').val()
+            if (state.trim() != "-1") {
+                var remoteState = 0;
+                if (state.trim() == "0")
+                    remoteState = 1;
+                hub.server.remoteDevice(channel, 'pmez5', remoteState);
+            }
         })
     })
 }

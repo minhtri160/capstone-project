@@ -78,13 +78,13 @@ namespace APMS.Web
                     sensor.Value = Double.Parse(sensorData[1]);
                     model.SensorList.Add(sensor);
                 }
-                model = saveSensorDataAPI.SaveData(model);
-                if (model != null)
+                SensorsWebInfoViewModel responseModel = saveSensorDataAPI.SaveData(model);
+                if (responseModel != null)
                 {
                     string sensorValue = "";
-                    for (int i = 0; i < model.SensorList.Count; i++)
+                    for (int i = 0; i < responseModel.SensorList.Count; i++)
                     {
-                        var item = model.SensorList[i];
+                        var item = responseModel.SensorList[i];
                         sensorValue += item.SensorId + ":" + item.Value + ":" + item.WarningState;
                         if (i < model.SensorList.Count - 1)
                             sensorValue += ";";
@@ -115,7 +115,9 @@ namespace APMS.Web
 
         public void CheckDevice()
         {
-            DateTime checkTime = DateTime.Now.AddSeconds(-(int)Business.Dictionary.Time.CheckDeviceTime);
+            DateTime Now = DateTime.UtcNow.AddHours(7);
+
+            DateTime checkTime = Now.AddSeconds(-(int)Business.Dictionary.Time.CheckDeviceTime);
 
             List<Device> deviceList = deviceBusiness.GetDeviceListByActiveTimeAndState(checkTime, (int)Business.Dictionary.DeviceState.Offline);
 

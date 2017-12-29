@@ -60,4 +60,24 @@ namespace APMS.Business.Web
         public string Unit { get; set; }
         public int? WarningState { get; set; }
     }
+    public class SensorWebViewModel
+    {
+        public SensorWebViewModel()
+        {
+
+        }
+
+        public SensorWebViewModel(SensorViewModel sensor)
+        {
+            SensorId = sensor.SensorId;
+            SensorName = sensor.SensorName;
+            Unit = sensor.Unit;
+            WarningState = sensor.WarningState;
+        }
+        public string SensorId { get; set; }
+        public string SensorName { get; set; }
+        public string Value { get; set; }
+        public string Unit { get; set; }
+        public int? WarningState { get; set; }
+    }
 }

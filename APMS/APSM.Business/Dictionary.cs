@@ -67,7 +67,12 @@ namespace APMS.Business.Dictionary
         TooDry = 12,
         HasMotion = 13,
         Others = 14,
-        PreWarning = 15
+        PreWarning = 15,
+        FanFast = 16,
+        HasWaterLeak = 17,
+        StillPowerSupply = 18,
+        PowerOutage = 19,
+        OverPower = 20
     }
 
     public enum DeviceType : int

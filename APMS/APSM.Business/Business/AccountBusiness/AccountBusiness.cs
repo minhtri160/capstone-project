@@ -88,5 +88,9 @@ namespace APMS.Business.Web
             Account result = accountRepository.GetAll().Where(x => x.Channel.Equals(channel)).FirstOrDefault();
             return result;
         }
+        public bool UpdateAccount(Account account)
+        {
+            return true;
+        }
     }
 }

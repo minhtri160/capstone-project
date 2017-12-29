@@ -2,11 +2,14 @@
 @model APMS.Business.Web.NotificationViewModel
 
 
-<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" id="noti_icon" >
+<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true" id="noti_icon">
     <i class="fa fa-bell-o"></i>
-    <span class="label label-danger" >@Model.UnreadNotiAmount</span>
+    @if (Model.UnreadNotiAmount > 0)
+    {
+        <span class="label label-danger">@Model.UnreadNotiAmount</span>
+    }
 </a>
-<ul class="dropdown-menu" >
+<ul class="dropdown-menu">
     <li class="header">You have @Model.UnreadNotiAmount new notifications</li>
     <li>
         <ul class="menu">

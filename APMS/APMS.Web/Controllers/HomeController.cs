@@ -18,7 +18,6 @@ namespace APMS.Web.Controllers
             DataAccess.Account account = (DataAccess.Account)Session["Account"];
             HomeViewModel model = new HomeViewModel();
             model.DeviceList = deviveBusiness.GetDeviceListByAccountId(account.AccountId);
-            model.NewNotificationAmount = notification.GetNumberOfUnreadNoticationByAccountId(account.AccountId);
             return View(model);
         }
         

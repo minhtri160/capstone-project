@@ -9,6 +9,6 @@ namespace APMS.Business.Web
         List<DeviceViewModel> GetDeviceListByAccountId(string accountId);
         List<string> GetDeviceIdListByAccountId(string accountId);
         List<Device> GetDeviceListByActiveTimeAndState(DateTime activeTime, int state);
-        void UpdateDevice(Device device);
+        bool UpdateDevice(Device device);
     }
 }

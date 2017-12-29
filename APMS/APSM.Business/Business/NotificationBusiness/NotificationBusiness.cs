@@ -73,7 +73,7 @@ namespace APMS.Business.Web
                 Account acc = accountRepository.GetAll().Where(x => x.AccountId.Equals(notification.AccountId)).FirstOrDefault();
                 
                 notificationRepository.Insert(notification);
-                //SendSMSNotification(acc.Phone, notification.Content);
+                SendSMSNotification(acc.Phone, notification.Content);
                 notification.Account = acc;
                 notificationRemainingQueue.Enqueue(notification);
             }
@@ -87,7 +87,7 @@ namespace APMS.Business.Web
         {
             string warningMessage = "";
             if (warningState == (int)WarningState.FanSlow)
-                warningMessage = "Slow Spinning";
+                warningMessage = "Too Slow Rotation Speed";
             else if (warningState == (int)WarningState.GasLeakage)
                 warningMessage = "Gas Leakage Detected";
             else if (warningState == (int)WarningState.HasFire)
@@ -103,17 +103,27 @@ namespace APMS.Business.Web
             else if (warningState == (int)WarningState.LowTemp)
                 warningMessage = "Low Temperature";
             else if (warningState == (int)WarningState.LowVolta)
-                warningMessage = "Low Voltage";
+                warningMessage = "Power Outage";
             else if (warningState == (int)WarningState.TooMoist)
                 warningMessage = "Too Moist";
             else if (warningState == (int)WarningState.Others)
-                warningMessage = "Others";
+                warningMessage = "Other. Contact admin system for more details";
             else if (warningState == (int)WarningState.OverCurrent)
                 warningMessage = "Over Current";
             else if (warningState == (int)WarningState.OverTemp)
                 warningMessage = "Over Temperature";
             else if (warningState == (int)WarningState.TooDry)
                 warningMessage = "Too Dry";
+            else if (warningState == (int)WarningState.HasWaterLeak)
+                warningMessage = "Water Leakage Detect";
+            else if (warningState == (int)WarningState.OverPower)
+                warningMessage = "Over Power";
+            else if (warningState == (int)WarningState.PowerOutage)
+                warningMessage = "No Electricity";
+            else if (warningState == (int)WarningState.StillPowerSupply)
+                warningMessage = "Still Power Supply While Turning Off";
+            else if (warningState == (int)WarningState.FanFast)
+                warningMessage = "Too Fast Rotation Speed";
             return warningMessage;
         }
 
@@ -122,9 +132,11 @@ namespace APMS.Business.Web
             DataAccess.Device currentDevice = sensor.Device;
             DataAccess.Notification notification = new DataAccess.Notification();
 
+            DateTime Now = DateTime.UtcNow.AddHours(7);
+
             notification.AccountId = currentDevice.AccountId;
             notification.Title = "Warning About " + currentDevice.DeviceName + " in " + currentDevice.Position;
-            notification.Time = DateTime.Now;
+            notification.Time = Now;
             string warningMessage = GetWarningMessage((int)sensor.WarningState);
 
             string addString1 = "";
@@ -142,10 +154,12 @@ namespace APMS.Business.Web
 
         public void SendWarningDisconnectionNotification(string accountId)
         {
+            DateTime Now = DateTime.UtcNow.AddHours(7);
+
             DataAccess.Notification notification = new DataAccess.Notification();
             notification.AccountId = accountId;
             notification.Title = "Warning About Disconnection";
-            notification.Time = DateTime.Now;
+            notification.Time = Now;
             notification.Content = "Center Control Unit of your house has been disconnected with server on " +
                                     notification.Time.ToShortDateString() + " " + notification.Time.ToShortTimeString();
             notification.State = (int)NotificationState.Unread;
@@ -154,6 +168,8 @@ namespace APMS.Business.Web
 
         public void SendWarningNotRespondNotification(Device device)
         {
+            DateTime Now = DateTime.UtcNow.AddHours(7);
+
             DataAccess.Notification notification = new DataAccess.Notification();
             notification.AccountId = device.AccountId;
             string addString1 = "";
@@ -165,7 +181,7 @@ namespace APMS.Business.Web
                 }
             }
             notification.Title = "Warning About Not Responding Of Device";
-            notification.Time = DateTime.Now;
+            notification.Time = Now;
             notification.Content = device.DeviceName + addString1 + " of your house was not responding to server on " +
                                     notification.Time.ToShortDateString() + " " + notification.Time.ToShortTimeString();
             notification.State = (int)NotificationState.Unread;

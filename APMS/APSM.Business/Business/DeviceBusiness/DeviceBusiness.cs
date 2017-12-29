@@ -48,9 +48,10 @@ namespace APMS.Business.Web
             List<Device> result = deviceRepository.GetAll().Where(x => x.ActiveTime < activeTime && x.State != state).ToList();
             return result;
         }
-        public void UpdateDevice(Device device)
+        public bool UpdateDevice(Device device)
         {
             deviceRepository.Update(device);
+            return true;
         }
     }
 }
